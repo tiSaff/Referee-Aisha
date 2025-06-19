@@ -23,7 +23,7 @@ const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
               alt="MySAFF Logo" 
               className="w-8 h-8 rounded"
             />
-            <span className="font-semibold text-base sm:text-lg">VAR Installation Types</span>
+            <span className="font-semibold text-base sm:text-lg">Referee Platform</span>
           </div>
         </div>
         
@@ -45,18 +45,10 @@ const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
             alt="MySAFF Logo" 
             className="w-10 h-10 rounded"
           />
-          <span className="font-bold text-xl">VAR Installation Types</span>
+          <span className="font-bold text-xl">Referee Platform</span>
         </div>
         
         <div className="flex items-center space-x-6">
-          <div className="relative">
-            <input
-              type="text"
-              placeholder="Search..."
-              className="bg-white bg-opacity-20 text-white placeholder-white placeholder-opacity-70 px-4 py-2 rounded-lg focus:outline-none focus:ring-2 focus:ring-white focus:ring-opacity-50"
-            />
-          </div>
-          
           <button className="p-2 rounded-full transition-colors duration-200 hover:bg-black hover:bg-opacity-10">
             <Bell className="w-5 h-5" />
           </button>

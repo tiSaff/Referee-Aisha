@@ -14,12 +14,6 @@ import {
   Plus,
   BarChart3,
   FileText,
-  ClipboardList,
-  Trophy,
-  Lock,
-  Shield,
-  History,
-  LayoutDashboard,
 } from 'lucide-react';
 import { PATHS } from '../constants/paths';
 import { useSidebarStore } from '../store/sidebarStore';
@@ -41,62 +35,40 @@ const Sidebar: React.FC<SidebarProps> = ({
   const { 
     settingsExpanded, 
     logsExpanded,
-    accessControlExpanded,
     setSettingsExpanded, 
-    setLogsExpanded,
-    setAccessControlExpanded
+    setLogsExpanded 
   } = useSidebarStore();
 
   const menuItems = [
-    { icon: LayoutDashboard, label: 'Today Board', path: PATHS.DASHBOARD },
-    { icon: ClipboardList, label: 'Stadium Data', path: PATHS.VIDEOS },
-    { icon: Trophy, label: 'Match Assignments', path: PATHS.USERS },
+    { icon: BarChart3, label: 'Dashboard', path: PATHS.DASHBOARD },
+    { icon: Video, label: 'Videos Library', path: PATHS.VIDEOS },
+    { icon: Users, label: 'MySAFF Users', path: PATHS.USERS },
+    { icon: ExternalLink, label: 'External Users', path: PATHS.EXTERNAL_USERS },
+    { icon: Bell, label: 'Notifications Center', path: PATHS.NOTIFICATIONS },
+    {
+      icon: FileText,
+      label: 'Logs',
+      path: PATHS.SYSTEM_LOGS,
+      hasSubmenu: true,
+      submenu: [
+        { label: 'System Logs', path: PATHS.SYSTEM_LOGS },
+        { label: 'User Logs', path: PATHS.USER_LOGS },
+        { label: 'Error Logs', path: PATHS.ERROR_LOGS },
+      ],
+    },
     {
       icon: Settings,
       label: 'Settings',
       path: PATHS.ADD_TOPIC,
       hasSubmenu: true,
       submenu: [
-        { label: 'VAR Installation Type', path: PATHS.SETTINGS_VAR },
-        { label: 'Items Types', path: PATHS.SETTINGS_ITEMS },
-        { label: 'Tracking Cameras Platforms', path: PATHS.SETTINGS_TRACKING_CAMERAS },
-      ],
-    },
-    {
-      icon: Lock,
-      label: 'Access Control',
-      path: PATHS.ACCESS_CONTROL,
-      hasSubmenu: true,
-      submenu: [
-        { label: 'Users', path: PATHS.SETTINGS_USERS },
-        { label: 'SAFF Users', path: PATHS.SETTINGS_SAFFUSERS },
-        { label: 'Roles', path: PATHS.SETTINGS_ROLES },
-      ],
-    },
-    {
-      icon: History,
-      label: 'Logs',
-      path: PATHS.SYSTEM_LOGS,
-      hasSubmenu: true,
-      submenu: [
-        { label: 'VAR Logs', path: PATHS.LOGS_VAR },
-        { label: 'Item Logs', path: PATHS.LOGS_ITEMS },
-        { label: 'Camera Logs', path: PATHS.LOGS_TRACKING_CAMERAS },
-        { label: 'Note Logs', path: PATHS.LOGS_NOTE },
-        { label: 'Assign Logs', path: PATHS.Stadium_LOGS_ASSIGN },
-        { label: 'Match Logs', path: PATHS.LOGS_MATCH },
-        { label: 'Match Assign Logs', path: PATHS.MATCH_LOGS_ASSIGN },
-        { label: 'Match Form Logs', path: PATHS.LOGS_MATCH_FORM },
-        { label: 'Users Logs', path: PATHS.LOGS_USERS },
-        { label: 'Roles Logs', path: PATHS.LOGS_ROLES },
-        { label: 'Login Logs', path: PATHS.LOGS_LOGIN },
+        { label: 'Add Topics', path: PATHS.ADD_TOPIC },
       ],
     },
   ];
 
   const handleLogsClick = () => setLogsExpanded(!logsExpanded);
   const handleSettingsClick = () => setSettingsExpanded(!settingsExpanded);
-  const handleAccessControlClick = () => setAccessControlExpanded(!accessControlExpanded);
 
   const handleNavigation = (path: string) => {
     navigate(path);
@@ -109,8 +81,6 @@ const Sidebar: React.FC<SidebarProps> = ({
       setLogsExpanded(true);
     } else if (parentPath === PATHS.ADD_TOPIC) {
       setSettingsExpanded(true);
-    } else if (parentPath === PATHS.ACCESS_CONTROL) {
-      setAccessControlExpanded(true);
     }
   };
 
@@ -120,8 +90,6 @@ const Sidebar: React.FC<SidebarProps> = ({
         return logsExpanded;
       case PATHS.ADD_TOPIC:
         return settingsExpanded;
-      case PATHS.ACCESS_CONTROL:
-        return accessControlExpanded;
       default:
         return false;
     }
@@ -133,8 +101,6 @@ const Sidebar: React.FC<SidebarProps> = ({
         return handleLogsClick;
       case PATHS.ADD_TOPIC:
         return handleSettingsClick;
-      case PATHS.ACCESS_CONTROL:
-        return handleAccessControlClick;
       default:
         return () => {};
     }
@@ -182,6 +148,19 @@ const Sidebar: React.FC<SidebarProps> = ({
           </button>
         </div>
 
+        {/* Upload Video Button */}
+        <div className="px-4 sm:px-6 pt-3 sm:pt-4 pb-2">
+          <button
+            onClick={onShowUploadModal}
+            className="flex items-center justify-center space-x-2 sm:space-x-3 w-full px-3 sm:px-4 py-2 sm:py-3 text-white rounded-md transition-all duration-200 font-medium hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base"
+            style={{ backgroundColor: '#2a835f' }}
+          >
+            <Upload className="w-4 sm:w-5 h-4 sm:h-5" />
+            <span>Upload Video</span>
+            <Plus className="w-3 sm:w-4 h-3 sm:h-4" />
+          </button>
+        </div>
+
         {/* Navigation */}
         <nav className="flex-1 py-4 sm:py-6 overflow-y-auto">
           <ul className="space-y-1 sm:space-y-2 px-3 sm:px-4">
@@ -192,47 +171,72 @@ const Sidebar: React.FC<SidebarProps> = ({
                     <button
                       onClick={getSubmenuClickHandler(item.path)}
                       className={`
-                        w-full flex items-center px-6 py-3 text-gray-700 hover:bg-[#F0F6F6]
-                        ${isParentActive(item) ? 'bg-[#E4EEEE] font-bold' : ''}
+                        w-full flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 transition-all duration-200 rounded-lg group text-sm sm:text-base
+                        ${isParentActive(item)
+                          ? 'bg-gray-100 text-gray-900 shadow-sm' 
+                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 hover:shadow-sm'
+                        }
                       `}
+                      style={isParentActive(item) ? { borderLeft: '4px solid #2a835f' } : {}}
                     >
-                      <item.icon className="w-5 h-5" />
-                      <span className="mx-4">{item.label}</span>
-                      <ChevronDown
-                        className={`w-4 h-4 ml-auto transition-transform ${
-                          getSubmenuExpanded(item.path) ? 'transform rotate-180' : ''
-                        }`}
-                      />
+                      <div className="flex items-center space-x-3 sm:space-x-4">
+                        <item.icon 
+                          className={`w-4 sm:w-5 h-4 sm:h-5 flex-shrink-0 transition-colors duration-200 ${
+                            isParentActive(item) ? 'text-gray-700' : 'text-gray-500 group-hover:text-gray-700'
+                          }`}
+                          style={isParentActive(item) ? { color: '#2a835f' } : {}}
+                        />
+                        <span className="font-medium">{item.label}</span>
+                      </div>
+                      {getSubmenuExpanded(item.path) ? (
+                        <ChevronDown className="w-3 sm:w-4 h-3 sm:h-4 text-gray-400" />
+                      ) : (
+                        <ChevronRight className="w-3 sm:w-4 h-3 sm:h-4 text-gray-400" />
+                      )}
                     </button>
                     
                     {/* Submenu */}
                     {getSubmenuExpanded(item.path) && item.submenu && (
-                      <div className="bg-gray-50">
+                      <ul className="mt-1 sm:mt-2 ml-4 sm:ml-6 space-y-1">
                         {item.submenu.map((subItem, subIndex) => (
-                          <button
-                            key={subIndex}
-                            onClick={() => handleSubmenuClick(subItem.path, item.path)}
-                            className={`
-                              w-full flex items-center px-6 py-3 text-gray-700 hover:bg-[#F0F6F6]
-                              ${isActive(subItem.path) ? 'bg-[#E4EEEE]' : ''}
-                            `}
-                          >
-                            <span className="mx-4">{subItem.label}</span>
-                          </button>
+                          <li key={subIndex}>
+                            <button
+                              onClick={() => handleSubmenuClick(subItem.path, item.path)}
+                              className={`
+                                w-full flex items-center space-x-2 sm:space-x-3 px-3 sm:px-4 py-1.5 sm:py-2 transition-all duration-200 rounded-lg text-xs sm:text-sm
+                                ${isActive(subItem.path)
+                                  ? 'bg-gray-100 text-gray-900 shadow-sm' 
+                                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                }
+                              `}
+                              style={isActive(subItem.path) ? { borderLeft: '3px solid #2a835f' } : {}}
+                            >
+                              <span>- {subItem.label}</span>
+                            </button>
+                          </li>
                         ))}
-                      </div>
+                      </ul>
                     )}
                   </>
                 ) : (
                   <button
                     onClick={() => handleNavigation(item.path)}
                     className={`
-                      w-full flex items-center px-6 py-3 text-gray-700 hover:bg-[#F0F6F6]
-                      ${isActive(item.path) ? 'bg-[#E4EEEE] font-bold' : ''}
+                      w-full flex items-center space-x-3 sm:space-x-4 px-3 sm:px-4 py-2 sm:py-3 transition-all duration-200 rounded-lg group text-sm sm:text-base
+                      ${isActive(item.path)
+                        ? 'bg-gray-100 text-gray-900 shadow-sm' 
+                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 hover:shadow-sm'
+                      }
                     `}
+                    style={isActive(item.path) ? { borderLeft: '4px solid #2a835f' } : {}}
                   >
-                    <item.icon className="w-5 h-5" />
-                    <span className="mx-4">{item.label}</span>
+                    <item.icon 
+                      className={`w-4 sm:w-5 h-4 sm:h-5 flex-shrink-0 transition-colors duration-200 ${
+                        isActive(item.path) ? 'text-gray-700' : 'text-gray-500 group-hover:text-gray-700'
+                      }`}
+                      style={isActive(item.path) ? { color: '#2a835f' } : {}}
+                    />
+                    <span className="font-medium">{item.label}</span>
                   </button>
                 )}
               </li>
