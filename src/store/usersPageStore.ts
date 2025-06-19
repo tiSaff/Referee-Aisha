@@ -15,6 +15,10 @@ interface UsersPageState {
   selectedImage: File | null;
   imagePreview: string | null;
   
+  // Role dropdown state
+  showRoleDropdown: boolean;
+  roleSearchTerm: string;
+  
   // Actions
   setShowChangePassword: (show: boolean) => void;
   setPasswordData: (data: { newPassword: string; confirmPassword: string }) => void;
@@ -23,6 +27,8 @@ interface UsersPageState {
   setShowChangePasswordModal: (show: boolean) => void;
   setSelectedImage: (image: File | null) => void;
   setImagePreview: (preview: string | null) => void;
+  setShowRoleDropdown: (show: boolean) => void;
+  setRoleSearchTerm: (term: string) => void;
   
   // Complex actions
   updatePasswordField: (field: 'newPassword' | 'confirmPassword', value: string) => void;
@@ -43,6 +49,8 @@ export const useUsersPageStore = create<UsersPageState>((set, get) => ({
   showChangePasswordModal: false,
   selectedImage: null,
   imagePreview: null,
+  showRoleDropdown: false,
+  roleSearchTerm: '',
   
   // Basic setters
   setShowChangePassword: (show: boolean) => set({ showChangePassword: show }),
@@ -52,6 +60,8 @@ export const useUsersPageStore = create<UsersPageState>((set, get) => ({
   setShowChangePasswordModal: (show: boolean) => set({ showChangePasswordModal: show }),
   setSelectedImage: (image: File | null) => set({ selectedImage: image }),
   setImagePreview: (preview: string | null) => set({ imagePreview: preview }),
+  setShowRoleDropdown: (show: boolean) => set({ showRoleDropdown: show }),
+  setRoleSearchTerm: (term: string) => set({ roleSearchTerm: term }),
   
   // Complex actions
   updatePasswordField: (field: 'newPassword' | 'confirmPassword', value: string) => {
@@ -90,6 +100,8 @@ export const useUsersPageStore = create<UsersPageState>((set, get) => ({
     showConfirmPassword: false,
     showChangePasswordModal: false,
     selectedImage: null,
-    imagePreview: null
+    imagePreview: null,
+    showRoleDropdown: false,
+    roleSearchTerm: ''
   }),
 }));

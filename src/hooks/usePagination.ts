@@ -1,4 +1,5 @@
-import { useState, useMemo } from 'react';
+import { useMemo } from 'react';
+import { usePaginationStore } from '../store/paginationStore';
 
 interface UsePaginationProps<T> {
   data: T[];
@@ -24,7 +25,11 @@ export const usePagination = <T>({
   itemsPerPage = 10,
   initialPage = 1
 }: UsePaginationProps<T>): UsePaginationReturn<T> => {
-  const [currentPage, setCurrentPage] = useState(initialPage);
+  const { 
+    currentPage, 
+    setCurrentPage,
+    resetToFirstPage 
+  } = usePaginationStore();
 
   const totalItems = data.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
@@ -55,6 +60,13 @@ export const usePagination = <T>({
 
   const canGoNext = currentPage < totalPages;
   const canGoPrev = currentPage > 1;
+
+  // Reset to first page when data changes significantly
+  React.useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      resetToFirstPage();
+    }
+  }, [totalPages, currentPage, resetToFirstPage]);
 
   return {
     currentPage,

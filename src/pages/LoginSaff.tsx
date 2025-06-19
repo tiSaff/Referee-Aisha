@@ -1,17 +1,27 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Eye, EyeOff, LogIn, Globe } from 'lucide-react';
 import { PATHS } from '../constants/paths';
 import Button from '../components/common/Button';
+import { useLoginStore } from '../store/loginStore';
 
 const LoginSaff: React.FC = () => {
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
-  const [loading, setLoading] = useState(false);
+  
+  // Zustand store for login state
+  const {
+    email,
+    password,
+    showPassword,
+    loading,
+    setEmail,
+    setPassword,
+    setShowPassword,
+    setLoading,
+    resetForm
+  } = useLoginStore();
 
   const isRTL = i18n.language === 'ar';
 
@@ -22,6 +32,7 @@ const LoginSaff: React.FC = () => {
     // Simulate login process
     setTimeout(() => {
       setLoading(false);
+      resetForm();
       navigate(PATHS.DASHBOARD);
     }, 1500);
   };
@@ -29,6 +40,10 @@ const LoginSaff: React.FC = () => {
   const toggleLanguage = () => {
     const newLang = i18n.language === 'en' ? 'ar' : 'en';
     i18n.changeLanguage(newLang);
+  };
+
+  const toggleShowPassword = () => {
+    setShowPassword(!showPassword);
   };
 
   return (
@@ -95,7 +110,7 @@ const LoginSaff: React.FC = () => {
                 />
                 <button
                   type="button"
-                  onClick={() => setShowPassword(!showPassword)}
+                  onClick={toggleShowPassword}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                 >
                   {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}

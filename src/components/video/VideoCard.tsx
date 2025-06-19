@@ -1,6 +1,7 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React from 'react';
 import { Play, Calendar, User, MoreHorizontal, Eye, Edit, Trash2 } from 'lucide-react';
 import { VideoData } from '../../types';
+import { useVideoCardStore } from '../../store/videoCardStore';
 
 interface VideoCardProps {
   video: VideoData;
@@ -23,34 +24,48 @@ const VideoCard: React.FC<VideoCardProps> = ({
   getStatusBadge,
   t
 }) => {
-  const [showDropdown, setShowDropdown] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
+  const { 
+    showDropdown, 
+    activeVideoId,
+    setShowDropdown, 
+    setActiveVideoId 
+  } = useVideoCardStore();
+
+  const isDropdownOpen = showDropdown && activeVideoId === video.id;
 
   // Close dropdown when clicking outside
-  useEffect(() => {
+  React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (isDropdownOpen) {
         setShowDropdown(false);
+        setActiveVideoId(null);
       }
     };
 
-    if (showDropdown) {
+    if (isDropdownOpen) {
       document.addEventListener('mousedown', handleClickOutside);
     }
 
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showDropdown]);
+  }, [isDropdownOpen, setShowDropdown, setActiveVideoId]);
 
   const handleDropdownToggle = (e: React.MouseEvent) => {
     e.stopPropagation();
-    setShowDropdown(!showDropdown);
+    if (isDropdownOpen) {
+      setShowDropdown(false);
+      setActiveVideoId(null);
+    } else {
+      setShowDropdown(true);
+      setActiveVideoId(video.id);
+    }
   };
 
   const handleMenuAction = (action: string, e: React.MouseEvent) => {
     e.stopPropagation();
     setShowDropdown(false);
+    setActiveVideoId(null);
     
     switch (action) {
       case 'view':
@@ -88,7 +103,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
         </div>
 
         {/* Enhanced Dropdown Menu */}
-        <div className={`absolute top-2 sm:top-3 ${isRTL ? 'left-2 sm:left-3' : 'right-2 sm:right-3'} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} ref={dropdownRef}>
+        <div className={`absolute top-2 sm:top-3 ${isRTL ? 'left-2 sm:left-3' : 'right-2 sm:right-3'} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}>
           <button 
             onClick={handleDropdownToggle}
             className="p-1.5 sm:p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 transition-colors relative z-10"
@@ -97,7 +112,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
           </button>
           
           {/* Dropdown Menu */}
-          {showDropdown && (
+          {isDropdownOpen && (
             <div className={`absolute ${isRTL ? 'left-0' : 'right-0'} top-full mt-2 bg-white rounded-lg shadow-xl border border-gray-200 py-2 min-w-[140px] z-50 animate-in slide-in-from-top-2 duration-200`}>
               <button
                 onClick={(e) => handleMenuAction('view', e)}

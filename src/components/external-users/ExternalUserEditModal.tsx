@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { X, Users as UsersIcon, Mail, Globe } from 'lucide-react';
 import { User } from '../../types';
 import Button from '../common/Button';
 import FormField from '../common/FormField';
+import { useExternalUserEditModalStore } from '../../store/externalUserEditModalStore';
 
 interface ExternalUserEditModalProps {
   isOpen: boolean;
@@ -274,9 +275,14 @@ const ExternalUserEditModal: React.FC<ExternalUserEditModalProps> = ({
   onFieldChange,
   loading = false
 }) => {
-  // Country dropdown state
-  const [showCountryDropdown, setShowCountryDropdown] = useState(false);
-  const [countrySearchTerm, setCountrySearchTerm] = useState('');
+  // Zustand store for modal state
+  const {
+    showCountryDropdown,
+    countrySearchTerm,
+    setShowCountryDropdown,
+    setCountrySearchTerm,
+    resetModal
+  } = useExternalUserEditModalStore();
 
   // Handle send reset password email
   const handleSendResetPasswordEmail = () => {
@@ -292,8 +298,7 @@ const ExternalUserEditModal: React.FC<ExternalUserEditModalProps> = ({
   // Handle modal close with cleanup
   const handleClose = () => {
     onClose();
-    setShowCountryDropdown(false);
-    setCountrySearchTerm('');
+    resetModal();
   };
 
   // Handle country selection
@@ -312,7 +317,7 @@ const ExternalUserEditModal: React.FC<ExternalUserEditModalProps> = ({
   const selectedCountry = countryOptions.find(country => country.name === user?.department);
 
   // Handle escape key
-  useEffect(() => {
+  React.useEffect(() => {
     const handleEscapeKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape' && isOpen) {
         if (showCountryDropdown) {
@@ -332,7 +337,7 @@ const ExternalUserEditModal: React.FC<ExternalUserEditModalProps> = ({
       document.removeEventListener('keydown', handleEscapeKey);
       document.body.style.overflow = 'unset';
     };
-  }, [isOpen, showCountryDropdown]);
+  }, [isOpen, showCountryDropdown, setShowCountryDropdown]);
 
   if (!isOpen || !user) return null;
 

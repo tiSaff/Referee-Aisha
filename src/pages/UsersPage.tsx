@@ -100,17 +100,16 @@ const UsersPage: React.FC = () => {
     showChangePasswordModal,
     selectedImage,
     imagePreview,
+    showRoleDropdown,
+    roleSearchTerm,
     setShowChangePasswordModal,
     setSelectedImage,
     setImagePreview,
+    setShowRoleDropdown,
+    setRoleSearchTerm,
     resetImageUpload,
     resetAll
   } = useUsersPageStore();
-
-  // NEW: Multi-select role dropdown state
-  const [showRoleDropdown, setShowRoleDropdown] = React.useState(false);
-  const [roleSearchTerm, setRoleSearchTerm] = React.useState('');
-  const dropdownRef = React.useRef<HTMLDivElement>(null);
 
   // Handle image selection
   const handleImageSelect = (file: File) => {
@@ -177,7 +176,7 @@ const UsersPage: React.FC = () => {
     });
   };
 
-  // NEW: Handle multiple role selection
+  // Handle multiple role selection
   const getSelectedRoles = (): string[] => {
     if (!editingUser?.department) return [];
     return editingUser.department.split(', ').filter(role => role.trim());
@@ -230,7 +229,7 @@ const UsersPage: React.FC = () => {
   // Handle click outside to close dropdown
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (showRoleDropdown) {
         setShowRoleDropdown(false);
       }
     };
@@ -242,7 +241,7 @@ const UsersPage: React.FC = () => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [showRoleDropdown]);
+  }, [showRoleDropdown, setShowRoleDropdown]);
 
   if (loading && users.length === 0) {
     return <LoadingSpinner message="Loading users..." />;
@@ -366,7 +365,7 @@ const UsersPage: React.FC = () => {
               <div className="p-6">
                 {/* Role Selection - Matching Screenshot Design */}
                 <FormField label="Role" required>
-                  <div className="relative" ref={dropdownRef}>
+                  <div className="relative">
                     {/* Main Dropdown Button */}
                     <div
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white cursor-pointer flex items-center justify-between hover:border-gray-400 transition-colors"
