@@ -8,17 +8,15 @@ import {
   AlertTriangle,
   Check,
   ChevronDown
-  // Plus // Commented out Add New User functionality
 } from 'lucide-react';
 import { useUserManager } from '../hooks/useUserManager';
 import { useUsersPageStore } from '../store/usersPageStore';
 import { usePagination } from '../hooks/usePagination';
 import { useAlertStore } from '../store/alertStore';
 import { useConfirmationModalStore } from '../store/confirmationModalStore';
-// import { useAddUserModalStore } from '../store/addUserModalStore'; // Commented out Add New User functionality
+import { useMultiSelectDropdownStore } from '../store/multiSelectDropdownStore';
 import { User } from '../types';
 import ChangePasswordModal from '../components/users/ChangePasswordModal';
-// import AddUserModal from '../components/users/AddUserModal'; // Commented out Add New User functionality
 import UserCard from '../components/users/UserCard';
 import UserTable from '../components/users/UserTable';
 import UserProfileModal from '../components/users/UserProfileModal';
@@ -34,16 +32,17 @@ import LoadingSpinner from '../components/common/LoadingSpinner';
 import PageHeader from '../components/common/PageHeader';
 import Pagination from '../components/common/Pagination';
 import PageAlert from '../components/common/PageAlert';
+import MultiSelectDropdown from '../components/common/MultiSelectDropdown';
 
-// Role options for MySAFF users - NEW IMPLEMENTATION
+// Role options for MySAFF users
 const roleOptions = [
-  'Super Admin',
-  'Admin', 
-  'Media SAFFIR',
-  'Event SAFFIR',
-  'Jailan',
-  'ss22',
-  'ww'
+  { value: 'Super Admin', label: 'Super Admin' },
+  { value: 'Admin', label: 'Admin' },
+  { value: 'Media SAFFIR', label: 'Media SAFFIR' },
+  { value: 'Event SAFFIR', label: 'Event SAFFIR' },
+  { value: 'Jailan', label: 'Jailan' },
+  { value: 'ss22', label: 'ss22' },
+  { value: 'ww', label: 'ww' }
 ];
 
 const UsersPage: React.FC = () => {
@@ -81,7 +80,7 @@ const UsersPage: React.FC = () => {
   // Confirmation modal store
   const { showConfirmation } = useConfirmationModalStore();
 
-  // Pagination hook - ALWAYS show pagination
+  // Pagination hook
   const {
     currentPage,
     totalPages,
@@ -100,16 +99,35 @@ const UsersPage: React.FC = () => {
     showChangePasswordModal,
     selectedImage,
     imagePreview,
-    showRoleDropdown,
-    roleSearchTerm,
     setShowChangePasswordModal,
     setSelectedImage,
     setImagePreview,
-    setShowRoleDropdown,
-    setRoleSearchTerm,
     resetImageUpload,
     resetAll
   } = useUsersPageStore();
+
+  // Multi-select dropdown for roles
+  const roleDropdownId = 'user-roles';
+  const {
+    getDropdownState,
+    toggleDropdown,
+    closeDropdown,
+    setSearchTerm: setDropdownSearchTerm,
+    setSelectedValues,
+    addValue,
+    removeValue,
+    resetDropdown
+  } = useMultiSelectDropdownStore();
+
+  const roleDropdownState = getDropdownState(roleDropdownId);
+
+  // Initialize dropdown with user's current roles
+  React.useEffect(() => {
+    if (showEditModal && editingUser?.department) {
+      const currentRoles = editingUser.department.split(', ').filter(role => role.trim());
+      setSelectedValues(roleDropdownId, currentRoles);
+    }
+  }, [showEditModal, editingUser?.department, setSelectedValues]);
 
   // Handle image selection
   const handleImageSelect = (file: File) => {
@@ -138,7 +156,6 @@ const UsersPage: React.FC = () => {
   // Handle save password with success alert
   const handleSavePassword = (newPassword: string) => {
     console.log('Saving new password:', newPassword);
-    // Here you would typically call an API to update the password
     setShowChangePasswordModal(false);
     
     // Show success alert
@@ -176,47 +193,33 @@ const UsersPage: React.FC = () => {
     });
   };
 
-  // Handle multiple role selection
-  const getSelectedRoles = (): string[] => {
-    if (!editingUser?.department) return [];
-    return editingUser.department.split(', ').filter(role => role.trim());
-  };
-
-  const handleRoleToggle = (role: string) => {
-    const currentRoles = getSelectedRoles();
-    const isSelected = currentRoles.includes(role);
-    
-    let newRoles: string[];
-    if (isSelected) {
-      newRoles = currentRoles.filter(r => r !== role);
+  // Handle role selection
+  const handleRoleSelect = (role: string) => {
+    if (roleDropdownState.selectedValues.includes(role)) {
+      removeValue(roleDropdownId, role);
     } else {
-      newRoles = [...currentRoles, role];
+      addValue(roleDropdownId, role);
     }
     
-    const rolesString = newRoles.join(', ');
-    updateEditingUserField('department', rolesString);
-  };
-
-  const removeRole = (roleToRemove: string, event: React.MouseEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
+    // Update the editing user's department field
+    const updatedRoles = roleDropdownState.selectedValues.includes(role)
+      ? roleDropdownState.selectedValues.filter(r => r !== role)
+      : [...roleDropdownState.selectedValues, role];
     
-    const currentRoles = getSelectedRoles();
-    const newRoles = currentRoles.filter(role => role !== roleToRemove);
-    updateEditingUserField('department', newRoles.join(', '));
+    updateEditingUserField('department', updatedRoles.join(', '));
   };
 
-  // Filter roles based on search term
-  const filteredRoles = roleOptions.filter(role =>
-    role.toLowerCase().includes(roleSearchTerm.toLowerCase())
-  );
+  const handleRemoveRole = (role: string) => {
+    removeValue(roleDropdownId, role);
+    const updatedRoles = roleDropdownState.selectedValues.filter(r => r !== role);
+    updateEditingUserField('department', updatedRoles.join(', '));
+  };
 
   // Handle modal close with cleanup
   const handleCloseEditModal = () => {
     closeEditModal();
     resetAll();
-    setShowRoleDropdown(false);
-    setRoleSearchTerm('');
+    resetDropdown(roleDropdownId);
   };
 
   // Clear error when component unmounts
@@ -226,30 +229,13 @@ const UsersPage: React.FC = () => {
     };
   }, [clearError]);
 
-  // Handle click outside to close dropdown
-  React.useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (showRoleDropdown) {
-        setShowRoleDropdown(false);
-      }
-    };
-
-    if (showRoleDropdown) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, [showRoleDropdown, setShowRoleDropdown]);
-
   if (loading && users.length === 0) {
     return <LoadingSpinner message="Loading users..." />;
   }
 
   return (
     <div className="space-y-4 sm:space-y-6 px-4 sm:px-0">
-      {/* Page Alert - After Title */}
+      {/* Page Alert */}
       <PageAlert
         isVisible={alertVisible}
         message={alertMessage}
@@ -259,7 +245,7 @@ const UsersPage: React.FC = () => {
       {/* Error Display */}
       {error && <ErrorDisplay error={error} onClose={clearError} />}
 
-      {/* Page Header without Add User Button */}
+      {/* Page Header */}
       <PageHeader
         title="Total Users"
         subtitle={searchTerm ? `Showing ${filteredCount} of ${totalUsers} users` : undefined}
@@ -305,11 +291,11 @@ const UsersPage: React.FC = () => {
         />
       )}
 
-      {/* Pagination - ALWAYS SHOW */}
+      {/* Pagination */}
       <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6">
         <Pagination
           currentPage={currentPage}
-          totalPages={Math.max(1, totalPages)} // Ensure at least 1 page
+          totalPages={Math.max(1, totalPages)}
           totalItems={totalItems}
           itemsPerPage={itemsPerPage}
           onPageChange={goToPage}
@@ -338,7 +324,7 @@ const UsersPage: React.FC = () => {
         user={selectedUser}
       />
 
-      {/* Edit Modal with Multi-Select Role Dropdown - FIXED BACKDROP */}
+      {/* Edit Modal with Multi-Select Role Dropdown */}
       {showEditModal && editingUser && (
         <div className="fixed inset-0 z-[9999] overflow-y-auto">
           {/* Fixed Full Screen Backdrop */}
@@ -363,61 +349,20 @@ const UsersPage: React.FC = () => {
 
               {/* Modal Content */}
               <div className="p-6">
-                {/* Role Selection - Matching Screenshot Design */}
-                <FormField label="Role" required>
-                  <div className="relative">
-                    {/* Main Dropdown Button */}
-                    <div
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-white cursor-pointer flex items-center justify-between hover:border-gray-400 transition-colors"
-                      onClick={() => setShowRoleDropdown(!showRoleDropdown)}
-                    >
-                      <span className="text-gray-900 font-medium">
-                        {getSelectedRoles().length > 0 
-                          ? getSelectedRoles().join(', ')
-                          : 'Super Admin, Media SAFFIR'
-                        }
-                      </span>
-                      <ChevronDown className={`w-5 h-5 text-gray-400 transition-transform ${showRoleDropdown ? 'rotate-180' : ''}`} />
-                    </div>
-
-                    {/* Multi-Select Dropdown - Matching Screenshot */}
-                    {showRoleDropdown && (
-                      <div className="absolute z-50 w-full mt-1 bg-white border border-gray-300 rounded-lg shadow-lg overflow-hidden">
-                        {/* Role Options with Checkboxes */}
-                        <div className="py-2">
-                          {roleOptions.map((role) => {
-                            const isSelected = getSelectedRoles().includes(role);
-                            return (
-                              <div
-                                key={role}
-                                className="flex items-center px-4 py-3 hover:bg-gray-50 cursor-pointer transition-colors"
-                                onClick={() => handleRoleToggle(role)}
-                              >
-                                {/* Custom Checkbox with Menu Color */}
-                                <div className={`w-5 h-5 rounded border-2 mr-3 flex items-center justify-center transition-all ${
-                                  isSelected 
-                                    ? 'border-[#2a835f] bg-[#2a835f]' 
-                                    : 'border-gray-300 hover:border-gray-400'
-                                }`}>
-                                  {isSelected && (
-                                    <Check className="w-3 h-3 text-white" />
-                                  )}
-                                </div>
-                                
-                                {/* Role Label */}
-                                <span className={`text-sm font-medium ${
-                                  isSelected ? 'text-gray-900' : 'text-gray-700'
-                                }`}>
-                                  {role}
-                                </span>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-                </FormField>
+                {/* Role Selection using MultiSelectDropdown */}
+                <MultiSelectDropdown
+                  label="Role"
+                  placeholder="Select roles..."
+                  options={roleOptions}
+                  selectedValues={roleDropdownState.selectedValues}
+                  searchTerm={roleDropdownState.searchTerm}
+                  showDropdown={roleDropdownState.showDropdown}
+                  multiSelect={true}
+                  onToggleDropdown={() => toggleDropdown(roleDropdownId)}
+                  onSearchChange={(term) => setDropdownSearchTerm(roleDropdownId, term)}
+                  onOptionSelect={handleRoleSelect}
+                  onRemoveValue={handleRemoveRole}
+                />
 
                 {/* Save Button */}
                 <div className="flex justify-end pt-6 mt-6 border-t border-gray-200">
