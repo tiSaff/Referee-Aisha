@@ -7,7 +7,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
   return (
-    <header className="text-white px-4 py-3 flex items-center justify-between shadow-md w-full" style={{ backgroundColor: '#2a835f' }}>
+    <header className="text-white px-4 py-4 flex items-center justify-between shadow-md w-full" style={{ backgroundColor: '#2a835f' }}>
       <div className="flex items-center space-x-3">
         <button 
           onClick={onToggleSidebar}

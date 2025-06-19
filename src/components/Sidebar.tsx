@@ -15,6 +15,7 @@ import {
   BarChart3,
   FileText,
   UserCog,
+  Upload,
 } from 'lucide-react';
 import { PATHS } from '../constants/paths';
 import { useSidebarStore } from '../store/sidebarStore';
@@ -138,7 +139,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       {/* Sidebar */}
       <div
         className={`
-          z-50 flex flex-col  w-64 sm:w-72 max-w-full h-full
+          z-50 flex flex-col w-64 sm:w-72 max-w-full h-full
           ${isRTL ? 'border-l' : 'border-r'} border-gray-200
           ${isOpen ? (
             isRTL ? 
@@ -149,17 +150,29 @@ const Sidebar: React.FC<SidebarProps> = ({
             'fixed top-0 right-0 transition-transform duration-300 ease-in-out translate-x-full lg:relative lg:translate-x-0' :
             'fixed top-0 left-0 transition-transform duration-300 ease-in-out -translate-x-full lg:relative lg:translate-x-0'
           )}
-          lg:block
+          lg:block bg-white
         `}
         dir={isRTL ? 'rtl' : 'ltr'}
       >
-        {/* Back to MySAFF Button */}
+        {/* Upload Video Button */}
         <div className="p-4 sm:p-6 border-b border-gray-200">
           <button
-            className="flex items-center space-x-2 sm:space-x-3 w-full px-3 sm:px-4 py-2 sm:py-3 text-white rounded-md transition-colors duration-200 font-medium hover:opacity-90 text-sm sm:text-base"
+            onClick={onShowUploadModal}
+            className="flex items-center space-x-2 sm:space-x-3 w-full px-3 sm:px-4 py-2 text-white rounded-md transition-colors duration-200 font-medium hover:opacity-90 text-sm"
             style={{ backgroundColor: '#2a835f' }}
           >
-            <ArrowLeft className={`w-4 sm:w-5 h-4 sm:h-5 ${isRTL ? 'rotate-180' : ''}`} />
+            <Upload className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} />
+            <span>{t('sidebar.uploadVideo')}</span>
+          </button>
+        </div>
+
+        {/* Back to MySAFF Button */}
+        <div className="px-4 sm:px-6 pb-4 sm:pb-6 border-b border-gray-200">
+          <button
+            className="flex items-center space-x-2 sm:space-x-3 w-full px-3 sm:px-4 py-2 text-white rounded-md transition-colors duration-200 font-medium hover:opacity-90 text-sm"
+            style={{ backgroundColor: '#2a835f' }}
+          >
+            <ArrowLeft className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} />
             <span>{t('sidebar.backToMySAFF')}</span>
           </button>
         </div>
