@@ -3,7 +3,7 @@ import { Routes, Route, Navigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { PATHS } from '../../constants/paths';
 
-// Import pages
+// Import your existing pages
 import DashboardPage from '../../pages/DashboardPage';
 import VideosPage from '../../pages/VideosPage';
 import UsersPage from '../../pages/UsersPage';
