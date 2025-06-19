@@ -89,6 +89,68 @@ const DashboardPage: React.FC = () => {
 
       {dashboardData && (
         <>
+          {/* Last Updated Container - Moved to Top */}
+          <div className="bg-white rounded-3xl p-8 border border-gray-200 shadow-lg">
+            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+              <div className="flex items-center space-x-3">
+                <div className="w-12 h-12 bg-green-100 rounded-2xl flex items-center justify-center">
+                  <Calendar className="w-6 h-6 text-green-600" />
+                </div>
+                <span className="text-lg font-medium text-gray-700">
+                  Last updated: {new Date().toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric',
+                    hour: '2-digit',
+                    minute: '2-digit'
+                  })}
+                </span>
+              </div>
+              
+              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center lg:text-left">
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
+                    <UserCheck className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div>
+                    <div className="text-lg font-bold text-gray-900">{dashboardData.stats.totalUsers}</div>
+                    <div className="text-sm text-gray-600">Active Users</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
+                    <Video className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div>
+                    <div className="text-lg font-bold text-gray-900">{dashboardData.stats.totalVideos}</div>
+                    <div className="text-sm text-gray-600">Total Videos</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
+                    <Clock className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div>
+                    <div className="text-lg font-bold text-gray-900">{dashboardData.stats.pendingVideos}</div>
+                    <div className="text-sm text-gray-600">Pending Review</div>
+                  </div>
+                </div>
+                
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
+                    <Eye className="w-5 h-5 text-green-600" />
+                  </div>
+                  <div>
+                    <div className="text-lg font-bold text-gray-900">{dashboardData.stats.totalViews.toLocaleString()}</div>
+                    <div className="text-sm text-gray-600">Total Views</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
           {/* Four Main Charts Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
             
@@ -96,7 +158,7 @@ const DashboardPage: React.FC = () => {
             <div className="bg-white rounded-3xl border border-gray-200 p-8 shadow-lg hover:shadow-xl transition-all duration-300">
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center space-x-4">
-                  <div className="w-14 h-14 bg-gradient-to-br from-orange-500 to-red-500 rounded-2xl flex items-center justify-center shadow-lg">
+                  <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center shadow-lg">
                     <Play className="w-7 h-7 text-white" />
                   </div>
                   <div>
@@ -120,15 +182,15 @@ const DashboardPage: React.FC = () => {
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center space-x-3">
                           <div className={`w-8 h-8 rounded-xl flex items-center justify-center text-white font-bold text-sm ${
-                            index === 0 ? 'bg-gradient-to-br from-yellow-400 to-orange-500' :
-                            index === 1 ? 'bg-gradient-to-br from-gray-400 to-gray-500' :
-                            index === 2 ? 'bg-gradient-to-br from-orange-400 to-red-500' :
-                            'bg-gradient-to-br from-blue-400 to-blue-500'
+                            index === 0 ? 'bg-gradient-to-br from-green-400 to-green-500' :
+                            index === 1 ? 'bg-gradient-to-br from-green-500 to-green-600' :
+                            index === 2 ? 'bg-gradient-to-br from-green-600 to-green-700' :
+                            'bg-gradient-to-br from-green-400 to-green-500'
                           }`}>
                             {index + 1}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h4 className="text-sm font-semibold text-gray-900 truncate group-hover:text-orange-600 transition-colors" title={video.title}>
+                            <h4 className="text-sm font-semibold text-gray-900 truncate group-hover:text-green-600 transition-colors" title={video.title}>
                               {video.title}
                             </h4>
                             <p className="text-xs text-gray-500">by {video.uploadedBy}</p>
@@ -141,7 +203,7 @@ const DashboardPage: React.FC = () => {
                       </div>
                       <div className="w-full bg-gray-100 rounded-full h-2">
                         <div
-                          className="bg-gradient-to-r from-orange-500 to-red-500 h-2 rounded-full transition-all duration-1000 ease-out"
+                          className="bg-gradient-to-r from-green-500 to-green-600 h-2 rounded-full transition-all duration-1000 ease-out"
                           style={{ width: `${percentage}%` }}
                         />
                       </div>
@@ -155,7 +217,7 @@ const DashboardPage: React.FC = () => {
             <div className="bg-white rounded-3xl border border-gray-200 p-8 shadow-lg hover:shadow-xl transition-all duration-300">
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center space-x-4">
-                  <div className="w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center shadow-lg">
+                  <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center shadow-lg">
                     <Video className="w-7 h-7 text-white" />
                   </div>
                   <div>
@@ -248,7 +310,7 @@ const DashboardPage: React.FC = () => {
             <div className="bg-white rounded-3xl border border-gray-200 p-8 shadow-lg hover:shadow-xl transition-all duration-300">
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center space-x-4">
-                  <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-teal-500 rounded-2xl flex items-center justify-center shadow-lg">
+                  <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center shadow-lg">
                     <Globe className="w-7 h-7 text-white" />
                   </div>
                   <div>
@@ -256,7 +318,7 @@ const DashboardPage: React.FC = () => {
                     <p className="text-gray-600">External users by country</p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-2 text-blue-600 bg-blue-50 px-3 py-2 rounded-full">
+                <div className="flex items-center space-x-2 text-green-600 bg-green-50 px-3 py-2 rounded-full">
                   <Users className="w-4 h-4" />
                   <span className="text-sm font-semibold">{dashboardData.stats.totalUsers}</span>
                 </div>
@@ -285,7 +347,7 @@ const DashboardPage: React.FC = () => {
                       <div className="flex-1 relative">
                         <div className="h-4 bg-gray-100 rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-gradient-to-r from-green-500 to-teal-500 rounded-full transition-all duration-1000 ease-out"
+                            className="h-full bg-gradient-to-r from-green-500 to-green-600 rounded-full transition-all duration-1000 ease-out"
                             style={{ width: `${percentage}%` }}
                           />
                         </div>
@@ -303,7 +365,7 @@ const DashboardPage: React.FC = () => {
             <div className="bg-white rounded-3xl border border-gray-200 p-8 shadow-lg hover:shadow-xl transition-all duration-300">
               <div className="flex items-center justify-between mb-8">
                 <div className="flex items-center space-x-4">
-                  <div className="w-14 h-14 bg-gradient-to-br from-purple-500 to-pink-500 rounded-2xl flex items-center justify-center shadow-lg">
+                  <div className="w-14 h-14 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center shadow-lg">
                     <Monitor className="w-7 h-7 text-white" />
                   </div>
                   <div>
@@ -311,7 +373,7 @@ const DashboardPage: React.FC = () => {
                     <p className="text-gray-600">Monthly platform visits</p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-2 text-purple-600 bg-purple-50 px-3 py-2 rounded-full">
+                <div className="flex items-center space-x-2 text-green-600 bg-green-50 px-3 py-2 rounded-full">
                   <TrendingUp className="w-4 h-4" />
                   <span className="text-sm font-semibold">+18%</span>
                 </div>
@@ -333,7 +395,7 @@ const DashboardPage: React.FC = () => {
                     <div key={index} className="flex flex-col items-center flex-1 group">
                       <div className="w-full flex items-end justify-center h-48 mb-3">
                         <div
-                          className="w-full bg-gradient-to-t from-purple-500 to-pink-400 rounded-t-xl transition-all duration-700 hover:from-purple-600 hover:to-pink-500 cursor-pointer relative group-hover:scale-105 shadow-lg"
+                          className="w-full bg-gradient-to-t from-green-500 to-green-400 rounded-t-xl transition-all duration-700 hover:from-green-600 hover:to-green-500 cursor-pointer relative group-hover:scale-105 shadow-lg"
                           style={{ height: `${height}%` }}
                           title={`${item.month}: ${item.visits.toLocaleString()} visits`}
                         >
@@ -366,7 +428,7 @@ const DashboardPage: React.FC = () => {
                       <div key={day} className="text-center">
                         <div className="h-16 flex items-end justify-center mb-2">
                           <div
-                            className="w-6 bg-gradient-to-t from-purple-400 to-pink-300 rounded-t transition-all duration-500"
+                            className="w-6 bg-gradient-to-t from-green-400 to-green-300 rounded-t transition-all duration-500"
                             style={{ height: `${height}%` }}
                           />
                         </div>
@@ -375,66 +437,6 @@ const DashboardPage: React.FC = () => {
                       </div>
                     );
                   })}
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Summary Footer */}
-          <div className="bg-gradient-to-r from-gray-50 to-gray-100 rounded-3xl p-8 border border-gray-200">
-            <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-              <div className="flex items-center space-x-3">
-                <Calendar className="w-6 h-6 text-gray-500" />
-                <span className="text-lg font-medium text-gray-700">
-                  Last updated: {new Date().toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: 'long',
-                    day: 'numeric',
-                    hour: '2-digit',
-                    minute: '2-digit'
-                  })}
-                </span>
-              </div>
-              
-              <div className="grid grid-cols-2 lg:grid-cols-4 gap-6 text-center lg:text-left">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
-                    <UserCheck className="w-5 h-5 text-blue-600" />
-                  </div>
-                  <div>
-                    <div className="text-lg font-bold text-gray-900">{dashboardData.stats.totalUsers}</div>
-                    <div className="text-sm text-gray-600">Active Users</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-green-100 rounded-xl flex items-center justify-center">
-                    <Video className="w-5 h-5 text-green-600" />
-                  </div>
-                  <div>
-                    <div className="text-lg font-bold text-gray-900">{dashboardData.stats.totalVideos}</div>
-                    <div className="text-sm text-gray-600">Total Videos</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-yellow-100 rounded-xl flex items-center justify-center">
-                    <Clock className="w-5 h-5 text-yellow-600" />
-                  </div>
-                  <div>
-                    <div className="text-lg font-bold text-gray-900">{dashboardData.stats.pendingVideos}</div>
-                    <div className="text-sm text-gray-600">Pending Review</div>
-                  </div>
-                </div>
-                
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-purple-100 rounded-xl flex items-center justify-center">
-                    <Eye className="w-5 h-5 text-purple-600" />
-                  </div>
-                  <div>
-                    <div className="text-lg font-bold text-gray-900">{dashboardData.stats.totalViews.toLocaleString()}</div>
-                    <div className="text-sm text-gray-600">Total Views</div>
-                  </div>
                 </div>
               </div>
             </div>
