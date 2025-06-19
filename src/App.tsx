@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
+import Footer from './components/common/Footer';
 import UploadVideoModal from './components/UploadVideoModal';
 import UsersPage from './pages/UsersPage';
 import VideosPage from './pages/VideosPage';
@@ -103,7 +104,7 @@ function App() {
       />
 
       {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0">
+      <div className="flex-1 flex flex-col min-w-0 min-h-screen">
         <Header onToggleSidebar={toggleSidebar} />
 
         <div className="bg-white border-b border-gray-200 px-4 sm:px-6 py-4 sm:py-5">
@@ -115,6 +116,9 @@ function App() {
         <main className="flex-1 p-4 sm:p-6 bg-gray-50 min-w-0">
           {renderPageContent()}
         </main>
+
+        {/* Footer */}
+        <Footer />
       </div>
 
       <UploadVideoModal
