@@ -155,7 +155,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         dir={isRTL ? 'rtl' : 'ltr'}
       >
         {/* Upload Video Button */}
-        <div className="p-4 sm:p-6 border-b border-gray-200">
+        <div className="p-4 sm:p-6">
           <button
             onClick={onShowUploadModal}
             className="flex items-center space-x-2 sm:space-x-3 w-full px-3 sm:px-4 py-2 text-white rounded-md transition-colors duration-200 font-medium hover:opacity-90 text-sm"
@@ -167,7 +167,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Back to MySAFF Button */}
-        <div className="px-4 sm:px-6 pb-4 sm:pb-6 border-b border-gray-200">
+        <div className="px-4 sm:px-6 pb-4 sm:pb-6">
           <button
             className="flex items-center space-x-2 sm:space-x-3 w-full px-3 sm:px-4 py-2 text-white rounded-md transition-colors duration-200 font-medium hover:opacity-90 text-sm"
             style={{ backgroundColor: '#2a835f' }}
@@ -189,18 +189,16 @@ const Sidebar: React.FC<SidebarProps> = ({
                       className={`
                         w-full flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 transition-all duration-200 rounded-lg group text-sm sm:text-base
                         ${isParentActive(item)
-                          ? 'bg-gray-100 text-gray-900 shadow-sm' 
-                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 hover:shadow-sm'
+                          ? 'text-black' 
+                          : 'text-gray-600 hover:bg-green-100 hover:text-green-700'
                         }
                       `}
-                      style={isParentActive(item) ? { [`border${isRTL ? 'Right' : 'Left'}`]: '4px solid #2a835f' } : {}}
                     >
                       <div className="flex items-center space-x-3 sm:space-x-4">
                         <item.icon 
                           className={`w-4 sm:w-5 h-4 sm:h-5 flex-shrink-0 transition-colors duration-200 ${
-                            isParentActive(item) ? 'text-gray-700' : 'text-gray-500 group-hover:text-gray-700'
+                            isParentActive(item) ? 'text-black' : 'text-gray-500 group-hover:text-green-700'
                           }`}
-                          style={isParentActive(item) ? { color: '#2a835f' } : {}}
                         />
                         <span className="font-medium">{item.label}</span>
                       </div>
@@ -221,11 +219,10 @@ const Sidebar: React.FC<SidebarProps> = ({
                               className={`
                                 w-full flex items-center space-x-2 sm:space-x-3 px-3 sm:px-4 py-1.5 sm:py-2 transition-all duration-200 rounded-lg text-xs sm:text-sm
                                 ${isActive(subItem.path)
-                                  ? 'bg-gray-100 text-gray-900 shadow-sm' 
-                                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                  ? 'text-black' 
+                                  : 'text-gray-600 hover:bg-green-100 hover:text-green-700'
                                 }
                               `}
-                              style={isActive(subItem.path) ? { [`border${isRTL ? 'Right' : 'Left'}`]: '3px solid #2a835f' } : {}}
                             >
                               <span>- {subItem.label}</span>
                             </button>
@@ -240,17 +237,15 @@ const Sidebar: React.FC<SidebarProps> = ({
                     className={`
                       w-full flex items-center space-x-3 sm:space-x-4 px-3 sm:px-4 py-2 sm:py-3 transition-all duration-200 rounded-lg group text-sm sm:text-base
                       ${isActive(item.path)
-                        ? 'bg-gray-100 text-gray-900 shadow-sm' 
-                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 hover:shadow-sm'
+                        ? 'text-black' 
+                        : 'text-gray-600 hover:bg-green-100 hover:text-green-700'
                       }
                     `}
-                    style={isActive(item.path) ? { [`border${isRTL ? 'Right' : 'Left'}`]: '4px solid #2a835f' } : {}}
                   >
                     <item.icon 
                       className={`w-4 sm:w-5 h-4 sm:h-5 flex-shrink-0 transition-colors duration-200 ${
-                        isActive(item.path) ? 'text-gray-700' : 'text-gray-500 group-hover:text-gray-700'
+                        isActive(item.path) ? 'text-black' : 'text-gray-500 group-hover:text-green-700'
                       }`}
-                      style={isActive(item.path) ? { color: '#2a835f' } : {}}
                     />
                     <span className="font-medium">{item.label}</span>
                   </button>
