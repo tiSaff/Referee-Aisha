@@ -45,6 +45,56 @@ const VideoDetailsForm: React.FC<VideoDetailsFormProps> = ({
         />
       </div>
 
+      {/* Main Photo Selection */}
+      <div>
+        <label className="block text-sm font-medium text-gray-700 mb-2">
+          Main Photo
+        </label>
+        <div className="space-y-3">
+          <div className="flex items-center space-x-3">
+            <input
+              type="radio"
+              id="photo-auto"
+              name="mainPhoto"
+              value="auto"
+              defaultChecked
+              className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
+            />
+            <label htmlFor="photo-auto" className="text-sm text-gray-700">
+              Auto-generate from video thumbnail
+            </label>
+          </div>
+          
+          <div className="flex items-center space-x-3">
+            <input
+              type="radio"
+              id="photo-upload"
+              name="mainPhoto"
+              value="upload"
+              className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
+            />
+            <label htmlFor="photo-upload" className="text-sm text-gray-700">
+              Upload custom photo
+            </label>
+          </div>
+          
+          {/* Upload area - shown when upload option is selected */}
+          <div id="photo-upload-area" className="hidden mt-3">
+            <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors">
+              <button
+                type="button"
+                className="text-sm font-medium text-green-600 hover:text-green-700"
+              >
+                Choose image file
+              </button>
+              <p className="text-xs text-gray-500 mt-1">
+                JPG, PNG or GIF up to 5MB
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
       {/* Status - Only show if not pending */}
       {!isPendingVideo && !isPublishedVideo && (
         <div>
