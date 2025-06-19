@@ -27,7 +27,7 @@ function App() {
   }, [i18n.language, isRTL]);
 
   return (
-    <BrowserRouter basename="/fti-platform-demo/">
+    <BrowserRouter basename="">
       <Routing />
     </BrowserRouter>
   );
