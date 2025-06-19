@@ -1,19 +1,24 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import {
-  Upload,
-  Users,
-  Video,
+  ClipboardList,
   Settings,
+  User,
+  ChevronDown,
+  Users,
+  Shield,
+  History,
+  Lock,
+  LayoutDashboard,
+  Trophy,
+  ArrowLeft,
+  Upload,
+  Plus,
+  Video,
   Bell,
   ExternalLink,
-  Menu,
-  ArrowLeft,
-  ChevronDown,
-  ChevronRight,
-  Plus,
-  BarChart3,
   FileText,
+  BarChart3,
 } from 'lucide-react';
 import { PATHS } from '../constants/paths';
 import { useSidebarStore } from '../store/sidebarStore';
@@ -173,8 +178,8 @@ const Sidebar: React.FC<SidebarProps> = ({
                       className={`
                         w-full flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 transition-all duration-200 rounded-lg group text-sm sm:text-base
                         ${isParentActive(item)
-                          ? 'bg-gray-100 text-gray-900 shadow-sm' 
-                          : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 hover:shadow-sm'
+                          ? 'bg-[#E4EEEE] font-bold' 
+                          : 'text-gray-600 hover:bg-[#F0F6F6]'
                         }
                       `}
                       style={isParentActive(item) ? { borderLeft: '4px solid #2a835f' } : {}}
@@ -191,13 +196,13 @@ const Sidebar: React.FC<SidebarProps> = ({
                       {getSubmenuExpanded(item.path) ? (
                         <ChevronDown className="w-3 sm:w-4 h-3 sm:h-4 text-gray-400" />
                       ) : (
-                        <ChevronRight className="w-3 sm:w-4 h-3 sm:h-4 text-gray-400" />
+                        <ChevronDown className="w-3 sm:w-4 h-3 sm:h-4 text-gray-400" />
                       )}
                     </button>
                     
                     {/* Submenu */}
                     {getSubmenuExpanded(item.path) && item.submenu && (
-                      <ul className="mt-1 sm:mt-2 ml-4 sm:ml-6 space-y-1">
+                      <ul className="mt-1 sm:mt-2 ml-4 sm:ml-6 space-y-1 bg-gray-50">
                         {item.submenu.map((subItem, subIndex) => (
                           <li key={subIndex}>
                             <button
@@ -205,8 +210,8 @@ const Sidebar: React.FC<SidebarProps> = ({
                               className={`
                                 w-full flex items-center space-x-2 sm:space-x-3 px-3 sm:px-4 py-1.5 sm:py-2 transition-all duration-200 rounded-lg text-xs sm:text-sm
                                 ${isActive(subItem.path)
-                                  ? 'bg-gray-100 text-gray-900 shadow-sm' 
-                                  : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                                  ? 'bg-[#E4EEEE]' 
+                                  : 'text-gray-600 hover:bg-[#F0F6F6]'
                                 }
                               `}
                               style={isActive(subItem.path) ? { borderLeft: '3px solid #2a835f' } : {}}
@@ -224,8 +229,8 @@ const Sidebar: React.FC<SidebarProps> = ({
                     className={`
                       w-full flex items-center space-x-3 sm:space-x-4 px-3 sm:px-4 py-2 sm:py-3 transition-all duration-200 rounded-lg group text-sm sm:text-base
                       ${isActive(item.path)
-                        ? 'bg-gray-100 text-gray-900 shadow-sm' 
-                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 hover:shadow-sm'
+                        ? 'bg-[#E4EEEE] font-bold' 
+                        : 'text-gray-600 hover:bg-[#F0F6F6]'
                       }
                     `}
                     style={isActive(item.path) ? { borderLeft: '4px solid #2a835f' } : {}}
@@ -243,14 +248,6 @@ const Sidebar: React.FC<SidebarProps> = ({
             ))}
           </ul>
         </nav>
-
-        {/* Mobile close button */}
-        <button
-          onClick={onToggle}
-          className="lg:hidden absolute top-4 sm:top-6 right-4 sm:right-6 p-2 text-gray-400 hover:text-gray-600 rounded transition-colors"
-        >
-          <Menu className="w-4 sm:w-5 h-4 sm:h-5" />
-        </button>
       </div>
     </>
   );
