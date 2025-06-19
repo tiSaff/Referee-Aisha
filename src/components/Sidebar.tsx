@@ -126,12 +126,12 @@ const Sidebar: React.FC<SidebarProps> = ({
           ${isRTL ? 'border-l' : 'border-r'}
           ${isOpen ? (
             isRTL ? 
-            'fixed top-0 right-0 h-screen transition-transform duration-300 ease-in-out translate-x-0 lg:relative lg:h-auto' :
-            'fixed top-0 left-0 h-screen transition-transform duration-300 ease-in-out translate-x-0 lg:relative lg:h-auto'
+            'fixed top-0 right-0 h-screen transition-transform duration-300 ease-in-out translate-x-0 lg:relative lg:h-screen' :
+            'fixed top-0 left-0 h-screen transition-transform duration-300 ease-in-out translate-x-0 lg:relative lg:h-screen'
           ) : (
             isRTL ? 
-            'fixed top-0 right-0 h-screen transition-transform duration-300 ease-in-out translate-x-full lg:relative lg:h-auto lg:translate-x-0' :
-            'fixed top-0 left-0 h-screen transition-transform duration-300 ease-in-out -translate-x-full lg:relative lg:h-auto lg:translate-x-0'
+            'fixed top-0 right-0 h-screen transition-transform duration-300 ease-in-out translate-x-full lg:relative lg:h-screen lg:translate-x-0' :
+            'fixed top-0 left-0 h-screen transition-transform duration-300 ease-in-out -translate-x-full lg:relative lg:h-screen lg:translate-x-0'
           )}
           lg:block lg:h-screen
         `}
