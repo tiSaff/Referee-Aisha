@@ -1,5 +1,5 @@
 import React from 'react';
-import { Play, Pause, Volume2, Maximize, SkipBack, SkipForward } from 'lucide-react';
+import { Play, Pause, Volume2, Maximize, SkipBack, SkipForward, Video } from 'lucide-react';
 import { useVideoPlayerStore } from '../store/videoPlayerStore';
 
 const VideoPlayer: React.FC = () => {
@@ -26,6 +26,11 @@ const VideoPlayer: React.FC = () => {
           </div>
           <p className="text-gray-600 text-sm">Video Preview</p>
         </div>
+      </div>
+
+      {/* Video icon in corner */}
+      <div className="absolute top-3 right-3 bg-white bg-opacity-80 p-2 rounded-full shadow-md">
+        <Video className="w-5 h-5 text-gray-700" />
       </div>
 
       {/* Play button overlay */}

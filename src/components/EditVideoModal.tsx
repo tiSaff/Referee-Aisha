@@ -1,6 +1,6 @@
 import React, { useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { X } from 'lucide-react';
+import { X, Video } from 'lucide-react';
 import { VideoData } from '../types';
 import { useEditVideoModalStore } from '../store/editVideoModalStore';
 import VideoUploadSection from './video/VideoUploadSection';
@@ -187,7 +187,12 @@ const EditVideoModal: React.FC<EditVideoModalProps> = ({
         >
           {/* Modal Header */}
           <div className="flex items-center justify-between p-6 border-b border-gray-200 sticky top-0 bg-white z-10">
-            <h2 className="text-xl font-semibold text-gray-900">Edit Video</h2>
+            <div className="flex items-center space-x-3">
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ backgroundColor: 'rgba(42, 131, 95, 0.1)' }}>
+                <Video className="w-5 h-5" style={{ color: '#2a835f' }} />
+              </div>
+              <h2 className="text-xl font-semibold text-gray-900">Edit Video</h2>
+            </div>
             <button
               onClick={onClose}
               className="p-2 text-gray-400 hover:text-gray-600 rounded-lg hover:bg-gray-100 transition-colors"
@@ -236,6 +241,19 @@ const EditVideoModal: React.FC<EditVideoModalProps> = ({
               {/* Right Column */}
               <div className="space-y-6">
                 <VideoInfoPanel editData={editData} />
+                
+                {/* Video Preview */}
+                <div className="bg-gray-50 rounded-lg p-4">
+                  <h4 className="font-medium text-gray-900 mb-3">Video Preview</h4>
+                  <div className="aspect-video bg-gray-200 rounded-lg overflow-hidden flex items-center justify-center">
+                    <div className="text-center">
+                      <div className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg mx-auto mb-2">
+                        <Video className="w-8 h-8 text-gray-500" />
+                      </div>
+                      <p className="text-sm text-gray-500">Video Preview</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 

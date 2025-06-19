@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Edit, Trash2, User, Calendar, Eye } from 'lucide-react';
+import { X, Edit, Trash2, User, Calendar, Eye, Video } from 'lucide-react';
 import { VideoData } from '../../types';
 import VideoPlayer from '../VideoPlayer';
 import Button from '../common/Button';
@@ -27,7 +27,7 @@ const VideoDetailsView: React.FC<VideoDetailsViewProps> = ({
         <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200">
           <div className="flex items-center space-x-3 sm:space-x-4 min-w-0 flex-1">
             <div className="w-8 sm:w-12 h-8 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'rgba(42, 131, 95, 0.1)' }}>
-              <Eye className="w-4 sm:w-6 h-4 sm:h-6" style={{ color: '#2a835f' }} />
+              <Video className="w-4 sm:w-6 h-4 sm:h-6" style={{ color: '#2a835f' }} />
             </div>
             <div className="min-w-0 flex-1">
               <h2 className="text-lg sm:text-2xl font-bold text-gray-900 truncate">{video.title}</h2>

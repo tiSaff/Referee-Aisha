@@ -37,6 +37,39 @@ const DecisionSection: React.FC<DecisionSectionProps> = ({
     { key: 'varNo', label: 'VAR No' }
   ];
 
+  // Offside sub-options
+  const offsideSubOptions = [
+    { key: 'offsideInterferingPlay', label: 'Interfering with Play' },
+    { key: 'offsideInterferingOpponent', label: 'Interfering with an Opponent' },
+    { key: 'offsideGainingAdvantage', label: 'Gaining an Advantage' }
+  ];
+
+  // No Card sub-options
+  const noCardSubOptions = [
+    { key: 'noCard1', label: '1' },
+    { key: 'noCard2', label: '2' }
+  ];
+
+  // Yellow Card sub-options
+  const yellowCardSubOptions = [
+    { key: 'yellowCard3', label: '3' },
+    { key: 'yellowCard4', label: '4' },
+    { key: 'yellowCard5', label: '5' }
+  ];
+
+  // Red Card sub-options
+  const redCardSubOptions = [
+    { key: 'redCard6', label: '6' },
+    { key: 'redCard7', label: '7' },
+    { key: 'redCard8', label: '8' }
+  ];
+
+  // VAR Yes sub-options
+  const varYesSubOptions = [
+    { key: 'varYesOFR', label: 'OFR' },
+    { key: 'varYesVAROnly', label: 'VAR Only' }
+  ];
+
   // Handle radio button change
   const handleRadioChange = (groupName: string, selectedKey: string) => {
     // First, set all options in the group to false
@@ -56,6 +89,35 @@ const DecisionSection: React.FC<DecisionSectionProps> = ({
 
     // Then set the selected option to true
     onDecisionChange(selectedKey, true);
+  };
+
+  // Handle sub-option radio change
+  const handleSubRadioChange = (groupName: string, selectedKey: string) => {
+    const subOptionGroups = {
+      'offside': offsideSubOptions,
+      'noCard': noCardSubOptions,
+      'yellowCard': yellowCardSubOptions,
+      'redCard': redCardSubOptions,
+      'varYes': varYesSubOptions
+    };
+    
+    const groupOptions = subOptionGroups[groupName as keyof typeof subOptionGroups];
+    
+    if (groupOptions) {
+      groupOptions.forEach(option => {
+        if (option.key !== selectedKey && decisions[option.key]) {
+          onDecisionChange(option.key, false);
+        }
+      });
+    }
+    
+    // Set the selected sub-option to true
+    onDecisionChange(selectedKey, true);
+    
+    // Also ensure the parent option is selected
+    if (!decisions[groupName]) {
+      onDecisionChange(groupName, true);
+    }
   };
 
   // Radio button component
@@ -82,26 +144,25 @@ const DecisionSection: React.FC<DecisionSectionProps> = ({
     </label>
   );
 
-  // Checkbox for sub-options that remain as checkboxes
-  const DecisionCheckbox: React.FC<{ 
+  // Sub-option radio button component
+  const SubOptionRadio: React.FC<{ 
+    groupName: string;
     decisionKey: string; 
-    label: string; 
-    isSubOption?: boolean;
-  }> = ({ decisionKey, label, isSubOption = false }) => (
-    <label className={`flex items-center space-x-3 cursor-pointer group ${isSubOption ? 'ml-6' : ''}`}>
+    label: string;
+  }> = ({ groupName, decisionKey, label }) => (
+    <label className="flex items-center space-x-3 cursor-pointer group ml-6">
       <input
-        type="checkbox"
+        type="radio"
+        name={`${groupName}-sub`}
         checked={decisions[decisionKey] as boolean}
-        onChange={(e) => onDecisionChange(decisionKey, e.target.checked)}
-        className="rounded border-gray-300 focus:ring-2 transition-all duration-200"
+        onChange={() => handleSubRadioChange(groupName, decisionKey)}
+        className="rounded-full border-gray-300 focus:ring-2 transition-all duration-200"
         style={{ 
           '--tw-ring-color': '#2a835f',
           accentColor: '#2a835f'
         } as React.CSSProperties}
       />
-      <span className={`text-sm text-gray-700 group-hover:text-gray-900 transition-colors duration-200 ${
-        isSubOption ? 'text-gray-600 group-hover:text-gray-800' : ''
-      }`}>
+      <span className="text-sm text-gray-600 group-hover:text-gray-800 transition-colors duration-200">
         {label}
       </span>
     </label>
@@ -131,9 +192,14 @@ const DecisionSection: React.FC<DecisionSectionProps> = ({
                 {/* Show offside sub-options immediately under offside */}
                 {option.key === 'offside' && decisions.offside && (
                   <div className="space-y-2 mt-1 mb-3">
-                    <DecisionCheckbox decisionKey="offsideInterferingPlay" label="Interfering with Play" isSubOption />
-                    <DecisionCheckbox decisionKey="offsideInterferingOpponent" label="Interfering with an Opponent" isSubOption />
-                    <DecisionCheckbox decisionKey="offsideGainingAdvantage" label="Gaining an Advantage" isSubOption />
+                    {offsideSubOptions.map(subOption => (
+                      <SubOptionRadio
+                        key={subOption.key}
+                        groupName="offside"
+                        decisionKey={subOption.key}
+                        label={subOption.label}
+                      />
+                    ))}
                   </div>
                 )}
               </React.Fragment>
@@ -158,24 +224,40 @@ const DecisionSection: React.FC<DecisionSectionProps> = ({
                   {/* Show sub-options immediately under their parent */}
                   {option.key === 'noCard' && decisions.noCard && (
                     <div className="space-y-2 mt-1 mb-3">
-                      <DecisionCheckbox decisionKey="noCard1" label="1" isSubOption />
-                      <DecisionCheckbox decisionKey="noCard2" label="2" isSubOption />
+                      {noCardSubOptions.map(subOption => (
+                        <SubOptionRadio
+                          key={subOption.key}
+                          groupName="noCard"
+                          decisionKey={subOption.key}
+                          label={subOption.label}
+                        />
+                      ))}
                     </div>
                   )}
                   
                   {option.key === 'yellowCard' && decisions.yellowCard && (
                     <div className="space-y-2 mt-1 mb-3">
-                      <DecisionCheckbox decisionKey="yellowCard3" label="3" isSubOption />
-                      <DecisionCheckbox decisionKey="yellowCard4" label="4" isSubOption />
-                      <DecisionCheckbox decisionKey="yellowCard5" label="5" isSubOption />
+                      {yellowCardSubOptions.map(subOption => (
+                        <SubOptionRadio
+                          key={subOption.key}
+                          groupName="yellowCard"
+                          decisionKey={subOption.key}
+                          label={subOption.label}
+                        />
+                      ))}
                     </div>
                   )}
                   
                   {option.key === 'redCard' && decisions.redCard && (
                     <div className="space-y-2 mt-1 mb-3">
-                      <DecisionCheckbox decisionKey="redCard6" label="6" isSubOption />
-                      <DecisionCheckbox decisionKey="redCard7" label="7" isSubOption />
-                      <DecisionCheckbox decisionKey="redCard8" label="8" isSubOption />
+                      {redCardSubOptions.map(subOption => (
+                        <SubOptionRadio
+                          key={subOption.key}
+                          groupName="redCard"
+                          decisionKey={subOption.key}
+                          label={subOption.label}
+                        />
+                      ))}
                     </div>
                   )}
                 </React.Fragment>
@@ -200,8 +282,14 @@ const DecisionSection: React.FC<DecisionSectionProps> = ({
                 {/* Show VAR Yes sub-options immediately under VAR Yes */}
                 {option.key === 'varYes' && decisions.varYes && (
                   <div className="space-y-2 mt-1 mb-3">
-                    <DecisionCheckbox decisionKey="varYesOFR" label="OFR" isSubOption />
-                    <DecisionCheckbox decisionKey="varYesVAROnly" label="VAR Only" isSubOption />
+                    {varYesSubOptions.map(subOption => (
+                      <SubOptionRadio
+                        key={subOption.key}
+                        groupName="varYes"
+                        decisionKey={subOption.key}
+                        label={subOption.label}
+                      />
+                    ))}
                   </div>
                 )}
               </React.Fragment>
