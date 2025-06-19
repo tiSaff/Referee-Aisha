@@ -149,6 +149,7 @@ const AddExternalUserModal: React.FC<AddExternalUserModalProps> = ({
     password: '',
     confirmPassword: '',
     country: '',
+    captcha: ''
   });
   
   // Password visibility state
@@ -239,6 +240,7 @@ const AddExternalUserModal: React.FC<AddExternalUserModalProps> = ({
     if (!formData.password) newErrors.password = 'Password is required';
     if (!formData.confirmPassword) newErrors.confirmPassword = 'Please confirm your password';
     if (!formData.country) newErrors.country = 'Country is required';
+    if (!formData.captcha) newErrors.captcha = 'Captcha is required';
     
     // Email format
     if (formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
@@ -302,6 +304,7 @@ const AddExternalUserModal: React.FC<AddExternalUserModalProps> = ({
       password: '',
       confirmPassword: '',
       country: '',
+      captcha: ''
     });
     setErrors({});
     resetDropdown(countryDropdownId);
@@ -506,6 +509,36 @@ const AddExternalUserModal: React.FC<AddExternalUserModalProps> = ({
                 </button>
               </div>
             </FormField>
+
+            {/* Captcha */}
+            <div className="grid grid-cols-3 gap-4 items-center">
+              <div className="col-span-1 bg-gray-100 p-3 rounded-lg flex items-center justify-center">
+                <div className="text-lg font-mono text-gray-700">4KdEaq</div>
+                <button 
+                  type="button" 
+                  className="ml-2 p-1 bg-white rounded-md hover:bg-gray-50"
+                  onClick={() => console.log('Refresh captcha')}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                  </svg>
+                </button>
+              </div>
+              <div className="col-span-2">
+                <input
+                  type="text"
+                  name="captcha"
+                  value={formData.captcha}
+                  onChange={handleChange}
+                  placeholder="Enter Captcha"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:border-transparent transition-all duration-200"
+                  style={{ '--tw-ring-color': '#2a835f' } as React.CSSProperties}
+                />
+                {errors.captcha && (
+                  <p className="mt-1 text-sm text-red-600">{errors.captcha}</p>
+                )}
+              </div>
+            </div>
 
             {/* Submit Button */}
             <div className="pt-4 border-t border-gray-200">
