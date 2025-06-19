@@ -32,11 +32,12 @@ const VideoCard: React.FC<VideoCardProps> = ({
   } = useVideoCardStore();
 
   const isDropdownOpen = showDropdown && activeVideoId === video.id;
+  const dropdownRef = React.useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
   React.useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (isDropdownOpen) {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
         setShowDropdown(false);
         setActiveVideoId(null);
       }
@@ -64,6 +65,8 @@ const VideoCard: React.FC<VideoCardProps> = ({
 
   const handleMenuAction = (action: string, e: React.MouseEvent) => {
     e.stopPropagation();
+    e.preventDefault();
+    
     setShowDropdown(false);
     setActiveVideoId(null);
     
@@ -72,6 +75,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
         onVideoClick(video);
         break;
       case 'edit':
+        console.log("Edit action triggered for video:", video.id);
         onEditClick(video);
         break;
       case 'delete':
@@ -103,7 +107,10 @@ const VideoCard: React.FC<VideoCardProps> = ({
         </div>
 
         {/* Enhanced Dropdown Menu */}
-        <div className={`absolute top-2 sm:top-3 ${isRTL ? 'left-2 sm:left-3' : 'right-2 sm:right-3'} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}>
+        <div 
+          className={`absolute top-2 sm:top-3 ${isRTL ? 'left-2 sm:left-3' : 'right-2 sm:right-3'} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}
+          ref={dropdownRef}
+        >
           <button 
             onClick={handleDropdownToggle}
             className="p-1.5 sm:p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 transition-colors relative z-10"

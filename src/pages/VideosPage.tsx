@@ -40,16 +40,16 @@ const VideosPage: React.FC = () => {
     clearError,
   } = useVideoManager();
 
+  const isRTL = currentLanguage === 'ar';
+
+  // Confirmation modal store
+  const { showConfirmation } = useConfirmationModalStore();
+
   // Reset video card dropdown when navigating
   const { resetDropdown } = useVideoCardStore();
   useEffect(() => {
     return () => resetDropdown();
   }, [resetDropdown]);
-
-  const isRTL = currentLanguage === 'ar';
-
-  // Confirmation modal store
-  const { showConfirmation } = useConfirmationModalStore();
 
   // Pagination hook
   const {
@@ -70,7 +70,10 @@ const VideosPage: React.FC = () => {
   };
 
   const handleEditClick = (video: any) => {
+    console.log('Edit button clicked for video:', video.id);
+    // Set the current video first
     handleSelectVideo(video);
+    // Then open the edit modal
     setShowEditModal(true);
   };
 
@@ -267,6 +270,33 @@ const VideosPage: React.FC = () => {
           />
         </div>
       )}
+
+      {/* Edit Video Modal */}
+      {showEditModal && currentVideo && (
+        <EditVideoModal
+          isOpen={showEditModal}
+          onClose={() => setShowEditModal(false)}
+          video={currentVideo}
+          onSave={handleSaveEdit}
+          onFinalSave={() => setShowFinalSaveModal(true)}
+          onReturnToPending={() => setShowReturnToPendingModal(true)}
+        />
+      )}
+
+      {/* Video Action Modals */}
+      <VideoModals
+        showFinalSaveModal={showFinalSaveModal}
+        showReturnToPendingModal={showReturnToPendingModal}
+        onCloseFinalSave={() => setShowFinalSaveModal(false)}
+        onCloseReturnToPending={() => setShowReturnToPendingModal(false)}
+        onConfirmFinalSave={() => {
+          if (currentVideo) {
+            handleSaveEdit(currentVideo, undefined, true);
+          }
+        }}
+        onConfirmReturnToPending={handleReturnToPending}
+        t={t}
+      />
     </div>
   );
 };

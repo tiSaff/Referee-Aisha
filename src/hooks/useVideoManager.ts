@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { useVideoStore } from '../store/videoStore';
 import { VideoData } from '../types';
 
-export const useVideoManager = () => {
+export const useVideoManager =  () => {
   const {
     videos,
     currentVideo,
@@ -71,6 +71,7 @@ export const useVideoManager = () => {
   };
 
   const handleSelectVideo = (video: VideoData | null) => {
+    console.log("Selecting video:", video?.id);
     setCurrentVideo(video);
     setShowDetails(true);
   };
