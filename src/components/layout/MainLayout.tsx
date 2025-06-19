@@ -29,7 +29,7 @@ const MainLayout: React.FC = () => {
 
   return (
     <div
-      className="min-h-screen bg-gray-50 flex w-full overflow-x-hidden"
+      className="min-h-screen flex w-full overflow-x-hidden"
       dir={isRTL ? 'rtl' : 'ltr'}
     >
       {/* Sidebar */}

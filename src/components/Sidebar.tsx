@@ -2,14 +2,13 @@ import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
-  Upload,
+  ArrowLeft,
+  LayoutDashboard,
   Users,
   Video,
   Settings,
   Bell,
   ExternalLink,
-  Menu,
-  ArrowLeft,
   ChevronDown,
   ChevronRight,
   Plus,
@@ -44,7 +43,7 @@ const Sidebar: React.FC<SidebarProps> = ({
   } = useSidebarStore();
 
   const menuItems = [
-    { icon: BarChart3, label: t('sidebar.dashboard'), path: PATHS.DASHBOARD },
+    { icon: LayoutDashboard, label: t('sidebar.dashboard'), path: PATHS.DASHBOARD },
     { icon: Video, label: t('sidebar.videosLibrary'), path: PATHS.VIDEOS },
     { icon: Users, label: t('sidebar.mysaffUsers'), path: PATHS.USERS },
     { icon: ExternalLink, label: t('sidebar.externalUsers'), path: PATHS.EXTERNAL_USERS },
@@ -158,19 +157,6 @@ const Sidebar: React.FC<SidebarProps> = ({
           </button>
         </div>
 
-        {/* Upload Video Button */}
-        <div className="px-4 sm:px-6 pt-3 sm:pt-4 pb-2">
-          <button
-            onClick={onShowUploadModal}
-            className="flex items-center justify-center space-x-2 sm:space-x-3 w-full px-3 sm:px-4 py-2 sm:py-3 text-white rounded-md transition-all duration-200 font-medium hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] text-sm sm:text-base"
-            style={{ backgroundColor: '#2a835f' }}
-          >
-            <Upload className="w-4 sm:w-5 h-4 sm:h-5" />
-            <span>{t('sidebar.uploadVideo')}</span>
-            <Plus className="w-3 sm:w-4 h-3 sm:h-4" />
-          </button>
-        </div>
-
         {/* Navigation */}
         <nav className="flex-1 py-4 sm:py-6 overflow-y-auto">
           <ul className="space-y-1 sm:space-y-2 px-3 sm:px-4">
@@ -253,14 +239,6 @@ const Sidebar: React.FC<SidebarProps> = ({
             ))}
           </ul>
         </nav>
-
-        {/* Mobile close button */}
-        <button
-          onClick={onToggle}
-          className={`lg:hidden absolute top-4 sm:top-6 ${isRTL ? 'left-4 sm:left-6' : 'right-4 sm:right-6'} p-2 text-gray-400 hover:text-gray-600 rounded transition-colors`}
-        >
-          <Menu className="w-4 sm:w-5 h-4 sm:h-5" />
-        </button>
       </div>
     </>
   );
