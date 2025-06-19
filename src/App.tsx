@@ -9,6 +9,7 @@ import AddTopicPage from './pages/AddTopicPage';
 import NotificationsPage from './pages/NotificationsPage';
 import ExternalUsersPage from './pages/ExternalUsersPage';
 import LogsPage from './pages/LogsPage';
+import DashboardPage from './pages/DashboardPage';
 import GlobalConfirmationModal from './components/common/GlobalConfirmationModal';
 import { useUIStore } from './store/uiStore';
 import { useLanguageStore } from './store/languageStore';
@@ -60,6 +61,8 @@ function App() {
 
   const getPageTitle = () => {
     switch (currentPage) {
+      case 'dashboard':
+        return 'Dashboard';
       case 'videos':
         return t('videos.title');
       case 'users':
@@ -75,12 +78,14 @@ function App() {
       case 'error-logs':
         return 'System Logs';
       default:
-        return t('videos.title');
+        return 'Dashboard';
     }
   };
 
   const renderPageContent = () => {
     switch (currentPage) {
+      case 'dashboard':
+        return <DashboardPage />;
       case 'users':
         return <UsersPage />;
       case 'external':
