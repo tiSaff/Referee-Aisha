@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { X, Users } from 'lucide-react';
+import { X, UserCog } from 'lucide-react';
 import Button from '../common/Button';
 import FormField from '../common/FormField';
 
@@ -237,7 +237,7 @@ const AddRoleModal: React.FC<AddRoleModalProps> = ({
           <div className="flex items-center justify-between p-4 sm:p-6 border-b border-gray-200 sticky top-0 bg-white z-10 rounded-t-xl">
             <div className="flex items-center space-x-3">
               <div className="w-8 sm:w-10 h-8 sm:h-10 bg-gray-200 rounded-full flex items-center justify-center">
-                <Users className="w-4 sm:w-5 h-4 sm:h-5 text-gray-500" />
+                <UserCog className="w-4 sm:w-5 h-4 sm:h-5 text-gray-500" />
               </div>
               <h2 className="text-lg sm:text-xl font-semibold text-gray-900">Add New Role</h2>
             </div>

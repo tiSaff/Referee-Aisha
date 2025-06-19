@@ -97,6 +97,9 @@ export const useRolesManager = () => {
     setEditingRole(role);
     // In a real implementation, you would open an edit modal here
     console.log('Edit role:', role);
+    
+    // Show a message for now since edit functionality is not fully implemented
+    showAlert('Edit functionality will be implemented in a future update');
   };
 
   const handleDeleteRole = async (id: string) => {
@@ -105,13 +108,18 @@ export const useRolesManager = () => {
       // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 500));
       
+      // Get role name before deletion for the success message
+      const roleName = roles.find(r => r.id === id)?.nameEnglish || 'Role';
+      
       // Remove role from state
       setRoles(prevRoles => prevRoles.filter(role => role.id !== id));
       
       // Show success message
-      showAlert('Role deleted successfully');
+      showAlert(`Role "${roleName}" deleted successfully`);
+      return true;
     } catch (err) {
       setError('Failed to delete role');
+      return false;
     } finally {
       setLoading(false);
     }
@@ -142,11 +150,58 @@ export const useRolesManager = () => {
       
       // Show success message
       showAlert(`Role "${newRole.nameEnglish}" created successfully`);
+      return true;
     } catch (err) {
       setError('Failed to create role');
+      return false;
     } finally {
       setLoading(false);
     }
+  };
+
+  const refreshRoles = async () => {
+    setLoading(true);
+    try {
+      // Simulate API call
+      await new Promise(resolve => setTimeout(resolve, 800));
+      
+      // In a real app, you would fetch roles from the API here
+      // For now, we'll just simulate a refresh by doing nothing
+      
+      return true;
+    } catch (err) {
+      setError('Failed to refresh roles');
+      return false;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const exportRoles = () => {
+    // Create CSV content
+    const headers = ['ID', 'Name (English)', 'Name (Arabic)', 'Description (English)', 'Users Count', 'Permissions'];
+    const csvContent = [
+      headers.join(','),
+      ...roles.map(role => [
+        role.id,
+        `"${role.nameEnglish}"`,
+        `"${role.nameArabic}"`,
+        `"${role.descriptionEnglish}"`,
+        role.usersCount,
+        `"${role.permissions.join(', ')}"`
+      ].join(','))
+    ].join('\n');
+
+    // Create and download file
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    const url = URL.createObjectURL(blob);
+    link.setAttribute('href', url);
+    link.setAttribute('download', `roles_${new Date().toISOString().split('T')[0]}.csv`);
+    link.style.visibility = 'hidden';
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
   };
 
   const closeAddModal = () => {
@@ -176,5 +231,7 @@ export const useRolesManager = () => {
     closeAddModal,
     setSearchTerm,
     clearError,
+    refreshRoles,
+    exportRoles,
   };
 };

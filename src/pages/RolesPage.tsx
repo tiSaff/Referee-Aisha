@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Edit, Trash2, Search, X, Check } from 'lucide-react';
-import Button from '../components/common/Button';
-import PageHeader from '../components/common/PageHeader';
-import SearchBar from '../components/common/SearchBar';
-import Pagination from '../components/common/Pagination';
-import PageAlert from '../components/common/PageAlert';
+import { UserCog, Plus, Search, Download, RefreshCw } from 'lucide-react';
+import { useRolesManager } from '../hooks/useRolesManager';
 import { useAlertStore } from '../store/alertStore';
 import { useConfirmationModalStore } from '../store/confirmationModalStore';
-import AddRoleModal from '../components/roles/AddRoleModal';
+import { usePagination } from '../hooks/usePagination';
+import PageHeader from '../components/common/PageHeader';
+import SearchBar from '../components/common/SearchBar';
+import Button from '../components/common/Button';
+import ErrorDisplay from '../components/common/ErrorDisplay';
+import LoadingSpinner from '../components/common/LoadingSpinner';
 import RolesTable from '../components/roles/RolesTable';
-import { useRolesManager } from '../hooks/useRolesManager';
+import AddRoleModal from '../components/roles/AddRoleModal';
+import Pagination from '../components/common/Pagination';
+import PageAlert from '../components/common/PageAlert';
 
 const RolesPage: React.FC = () => {
   const {
@@ -27,6 +30,8 @@ const RolesPage: React.FC = () => {
     closeAddModal,
     setSearchTerm,
     clearError,
+    refreshRoles,
+    exportRoles,
   } = useRolesManager();
 
   // Alert store for success messages
@@ -35,15 +40,19 @@ const RolesPage: React.FC = () => {
   // Confirmation modal store
   const { showConfirmation } = useConfirmationModalStore();
 
-  // Pagination state
-  const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10;
-  
-  // Calculate pagination
-  const indexOfLastRole = currentPage * itemsPerPage;
-  const indexOfFirstRole = indexOfLastRole - itemsPerPage;
-  const currentRoles = roles.slice(indexOfFirstRole, indexOfLastRole);
-  const totalPages = Math.ceil(roles.length / itemsPerPage);
+  // Pagination hook - ALWAYS show pagination
+  const {
+    currentPage,
+    totalPages,
+    totalItems,
+    itemsPerPage,
+    paginatedData: paginatedRoles,
+    goToPage
+  } = usePagination({
+    data: roles,
+    itemsPerPage: 10,
+    initialPage: 1
+  });
 
   // Enhanced delete role with confirmation
   const handleDeleteRoleWithConfirmation = (roleId: string, roleName: string) => {
@@ -53,11 +62,31 @@ const RolesPage: React.FC = () => {
       confirmText: 'Delete Role',
       cancelText: 'Cancel',
       type: 'danger',
-      onConfirm: () => {
-        handleDeleteRole(roleId);
+      onConfirm: async () => {
+        await handleDeleteRole(roleId);
+        
+        // Success alert is handled in the manager
       }
     });
   };
+
+  // Enhanced refresh with success alert
+  const handleRefreshWithAlert = async () => {
+    await refreshRoles();
+    const { showAlert } = useAlertStore.getState();
+    showAlert('Roles refreshed successfully!');
+  };
+
+  // Enhanced export with success alert
+  const handleExportWithAlert = () => {
+    exportRoles();
+    const { showAlert } = useAlertStore.getState();
+    showAlert('Roles data exported successfully!');
+  };
+
+  if (loading && roles.length === 0) {
+    return <LoadingSpinner message="Loading roles..." />;
+  }
 
   return (
     <div className="space-y-6 px-4 sm:px-0">
@@ -68,11 +97,13 @@ const RolesPage: React.FC = () => {
         onClose={hideAlert}
       />
 
-      {/* Page Header */}
+      {error && <ErrorDisplay error={error} onClose={clearError} />}
+
       <PageHeader
-        title="Roles"
+        title="Roles Management"
         subtitle="Manage user roles and permissions"
-        icon={Plus}
+        icon={UserCog}
+        count={totalRoles}
         actionButton={{
           label: "Add New Role",
           onClick: handleAddRole,
@@ -80,40 +111,61 @@ const RolesPage: React.FC = () => {
         }}
       />
 
-      {/* Search Bar */}
       <div className="bg-white rounded-xl border border-gray-200 p-6">
-        <div className="flex flex-col lg:flex-row gap-4">
+        <div className="flex flex-col lg:flex-row gap-4 items-center">
           <SearchBar
             value={searchTerm}
             onChange={setSearchTerm}
             placeholder="Search roles by name or description..."
             className="flex-1"
           />
+          
+          <div className="flex items-center space-x-2">
+            <Button variant="ghost" onClick={handleRefreshWithAlert}>
+              <RefreshCw className="w-4 h-4" />
+            </Button>
+            <Button variant="ghost" onClick={handleExportWithAlert}>
+              <Download className="w-4 h-4" />
+            </Button>
+          </div>
         </div>
       </div>
 
-      {/* Roles Table */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-        <RolesTable 
-          roles={currentRoles}
-          onEdit={handleEditRole}
-          onDelete={handleDeleteRoleWithConfirmation}
-          loading={loading}
-        />
-      </div>
+      {roles.length > 0 ? (
+        <>
+          <RolesTable 
+            roles={paginatedRoles}
+            onEdit={handleEditRole}
+            onDelete={handleDeleteRoleWithConfirmation}
+            loading={loading}
+          />
+          
+          {/* Pagination - ALWAYS SHOW */}
+          <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6">
+            <Pagination
+              currentPage={currentPage}
+              totalPages={Math.max(1, totalPages)} // Ensure at least 1 page
+              totalItems={totalItems}
+              itemsPerPage={itemsPerPage}
+              onPageChange={goToPage}
+            />
+          </div>
+        </>
+      ) : (
+        <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
+          <UserCog className="w-16 h-16 text-gray-300 mx-auto mb-4" />
+          <h3 className="text-lg font-medium text-gray-900 mb-2">No roles found</h3>
+          <p className="text-gray-500 mb-6">
+            {searchTerm ? 'Try adjusting your search criteria' : 'Get started by creating your first role'}
+          </p>
+          {searchTerm ? (
+            <Button onClick={() => setSearchTerm('')}>Clear Search</Button>
+          ) : (
+            <Button onClick={handleAddRole}>Add New Role</Button>
+          )}
+        </div>
+      )}
 
-      {/* Pagination */}
-      <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6">
-        <Pagination
-          currentPage={currentPage}
-          totalPages={Math.max(1, totalPages)}
-          totalItems={roles.length}
-          itemsPerPage={itemsPerPage}
-          onPageChange={setCurrentPage}
-        />
-      </div>
-
-      {/* Add Role Modal */}
       <AddRoleModal
         isOpen={showAddModal}
         onClose={closeAddModal}

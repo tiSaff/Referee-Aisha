@@ -1,5 +1,5 @@
 import React from 'react';
-import { Edit, Trash2, Users } from 'lucide-react';
+import { Edit, Trash2, UserCog, Check, X } from 'lucide-react';
 import Button from '../common/Button';
 
 interface Role {
@@ -33,6 +33,7 @@ const RolesTable: React.FC<RolesTableProps> = ({
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Description</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Users</th>
+            <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Permissions</th>
             <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
           </tr>
         </thead>
@@ -42,7 +43,7 @@ const RolesTable: React.FC<RolesTableProps> = ({
               <td className="px-6 py-4">
                 <div className="flex items-center space-x-3">
                   <div className="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center">
-                    <Users className="w-4 h-4 text-gray-500" />
+                    <UserCog className="w-4 h-4 text-gray-500" />
                   </div>
                   <div className="min-w-0 flex-1">
                     <div className="font-medium text-gray-900 text-sm">{role.nameEnglish}</div>
@@ -56,6 +57,33 @@ const RolesTable: React.FC<RolesTableProps> = ({
               <td className="px-6 py-4">
                 <div className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
                   {role.usersCount} users
+                </div>
+              </td>
+              <td className="px-6 py-4">
+                <div className="flex flex-wrap gap-1">
+                  {role.permissions.includes('manageUsers') && (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <Check className="w-3 h-3 mr-1" />
+                      Users
+                    </span>
+                  )}
+                  {role.permissions.includes('manageRoles') && (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <Check className="w-3 h-3 mr-1" />
+                      Roles
+                    </span>
+                  )}
+                  {role.permissions.includes('manageSettings') && (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                      <Check className="w-3 h-3 mr-1" />
+                      Settings
+                    </span>
+                  )}
+                  {role.permissions.length > 3 && (
+                    <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                      +{role.permissions.length - 3} more
+                    </span>
+                  )}
                 </div>
               </td>
               <td className="px-6 py-4">
