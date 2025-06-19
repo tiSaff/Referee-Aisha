@@ -138,7 +138,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       {/* Sidebar */}
       <div
         className={`
-          z-50 flex flex-col shadow-lg w-64 sm:w-72 max-w-full h-full
+          z-50 flex flex-col  w-64 sm:w-72 max-w-full h-full
           ${isRTL ? 'border-l' : 'border-r'} border-gray-200
           ${isOpen ? (
             isRTL ? 
