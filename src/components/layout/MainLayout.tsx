@@ -29,26 +29,29 @@ const MainLayout: React.FC = () => {
 
   return (
     <div
-      className="min-h-screen flex w-full overflow-x-hidden"
+      className="min-h-screen flex flex-col w-full overflow-x-hidden"
       dir={isRTL ? 'rtl' : 'ltr'}
     >
-      {/* Sidebar */}
-      <Sidebar
-        isOpen={sidebarOpen}
-        onToggle={toggleSidebar}
-        onShowUploadModal={handleShowUploadModal}
-      />
+      {/* Header */}
+      <Header onToggleSidebar={toggleSidebar} />
+      
+      <div className="flex flex-1">
+        {/* Sidebar */}
+        <Sidebar
+          isOpen={sidebarOpen}
+          onToggle={toggleSidebar}
+          onShowUploadModal={handleShowUploadModal}
+        />
 
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0 min-h-screen">
-        <Header onToggleSidebar={toggleSidebar} />
+        {/* Main Content Area */}
+        <div className="flex-1 flex flex-col min-w-0 min-h-screen bg-gray-50">
+          <main className="flex-1 p-4 sm:p-6 min-w-0">
+            <Outlet />
+          </main>
 
-        <main className="flex-1 p-4 sm:p-6 bg-gray-50 min-w-0">
-          <Outlet />
-        </main>
-
-        {/* Footer */}
-        <Footer />
+          {/* Footer */}
+          <Footer />
+        </div>
       </div>
 
       <UploadVideoModal
