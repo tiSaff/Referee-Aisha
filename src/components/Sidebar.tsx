@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import {
   Upload,
   Users,
@@ -32,8 +31,6 @@ const Sidebar: React.FC<SidebarProps> = ({
 }) => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { t, i18n } = useTranslation();
-  const isRTL = i18n.language === 'ar';
   
   const { 
     settingsExpanded, 
@@ -43,29 +40,29 @@ const Sidebar: React.FC<SidebarProps> = ({
   } = useSidebarStore();
 
   const menuItems = [
-    { icon: BarChart3, label: t('sidebar.dashboard'), path: PATHS.DASHBOARD },
-    { icon: Video, label: t('sidebar.videosLibrary'), path: PATHS.VIDEOS },
-    { icon: Users, label: t('sidebar.mysaffUsers'), path: PATHS.USERS },
-    { icon: ExternalLink, label: t('sidebar.externalUsers'), path: PATHS.EXTERNAL_USERS },
-    { icon: Bell, label: t('sidebar.notificationsCenter'), path: PATHS.NOTIFICATIONS },
+    { icon: BarChart3, label: 'Dashboard', path: PATHS.DASHBOARD },
+    { icon: Video, label: 'Videos Library', path: PATHS.VIDEOS },
+    { icon: Users, label: 'MySAFF Users', path: PATHS.USERS },
+    { icon: ExternalLink, label: 'External Users', path: PATHS.EXTERNAL_USERS },
+    { icon: Bell, label: 'Notifications Center', path: PATHS.NOTIFICATIONS },
     {
       icon: FileText,
-      label: t('sidebar.logs'),
+      label: 'Logs',
       path: PATHS.SYSTEM_LOGS,
       hasSubmenu: true,
       submenu: [
-        { label: t('sidebar.systemLogs'), path: PATHS.SYSTEM_LOGS },
-        { label: t('sidebar.userLogs'), path: PATHS.USER_LOGS },
-        { label: t('sidebar.errorLogs'), path: PATHS.ERROR_LOGS },
+        { label: 'System Logs', path: PATHS.SYSTEM_LOGS },
+        { label: 'User Logs', path: PATHS.USER_LOGS },
+        { label: 'Error Logs', path: PATHS.ERROR_LOGS },
       ],
     },
     {
       icon: Settings,
-      label: t('sidebar.settings'),
+      label: 'Settings',
       path: PATHS.ADD_TOPIC,
       hasSubmenu: true,
       submenu: [
-        { label: t('sidebar.addTopics'), path: PATHS.ADD_TOPIC },
+        { label: 'Add Topics', path: PATHS.ADD_TOPIC },
       ],
     },
   ];
@@ -131,19 +128,14 @@ const Sidebar: React.FC<SidebarProps> = ({
       <div
         className={`
           bg-white border-gray-200 z-50 flex flex-col shadow-lg w-64 sm:w-72 max-w-full h-screen
-          ${isRTL ? 'border-l' : 'border-r'}
+          border-r
           ${isOpen ? (
-            isRTL ? 
-            'fixed top-0 right-0 transition-transform duration-300 ease-in-out translate-x-0 lg:relative' :
             'fixed top-0 left-0 transition-transform duration-300 ease-in-out translate-x-0 lg:relative'
           ) : (
-            isRTL ? 
-            'fixed top-0 right-0 transition-transform duration-300 ease-in-out translate-x-full lg:relative lg:translate-x-0' :
             'fixed top-0 left-0 transition-transform duration-300 ease-in-out -translate-x-full lg:relative lg:translate-x-0'
           )}
           lg:block
         `}
-        dir={isRTL ? 'rtl' : 'ltr'}
       >
         {/* Back to MySAFF Button */}
         <div className="p-4 sm:p-6 border-b border-gray-200">
@@ -151,8 +143,8 @@ const Sidebar: React.FC<SidebarProps> = ({
             className="flex items-center space-x-2 sm:space-x-3 w-full px-3 sm:px-4 py-2 sm:py-3 text-white rounded-md transition-colors duration-200 font-medium hover:opacity-90 text-sm sm:text-base"
             style={{ backgroundColor: '#2a835f' }}
           >
-            <ArrowLeft className={`w-4 sm:w-5 h-4 sm:h-5 ${isRTL ? 'rotate-180' : ''}`} />
-            <span>{t('sidebar.backToMySAFF')}</span>
+            <ArrowLeft className="w-4 sm:w-5 h-4 sm:h-5" />
+            <span>Back to MySAFF</span>
           </button>
         </div>
 
@@ -164,7 +156,7 @@ const Sidebar: React.FC<SidebarProps> = ({
             style={{ backgroundColor: '#2a835f' }}
           >
             <Upload className="w-4 sm:w-5 h-4 sm:h-5" />
-            <span>{t('sidebar.uploadVideo')}</span>
+            <span>Upload Video</span>
             <Plus className="w-3 sm:w-4 h-3 sm:h-4" />
           </button>
         </div>
@@ -185,7 +177,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                           : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 hover:shadow-sm'
                         }
                       `}
-                      style={isParentActive(item) ? { [`border${isRTL ? 'Right' : 'Left'}`]: '4px solid #2a835f' } : {}}
+                      style={isParentActive(item) ? { borderLeft: '4px solid #2a835f' } : {}}
                     >
                       <div className="flex items-center space-x-3 sm:space-x-4">
                         <item.icon 
@@ -199,13 +191,13 @@ const Sidebar: React.FC<SidebarProps> = ({
                       {getSubmenuExpanded(item.path) ? (
                         <ChevronDown className="w-3 sm:w-4 h-3 sm:h-4 text-gray-400" />
                       ) : (
-                        <ChevronRight className={`w-3 sm:w-4 h-3 sm:h-4 text-gray-400 ${isRTL ? 'rotate-180' : ''}`} />
+                        <ChevronRight className="w-3 sm:w-4 h-3 sm:h-4 text-gray-400" />
                       )}
                     </button>
                     
                     {/* Submenu */}
                     {getSubmenuExpanded(item.path) && item.submenu && (
-                      <ul className={`mt-1 sm:mt-2 ${isRTL ? 'mr-4 sm:mr-6' : 'ml-4 sm:ml-6'} space-y-1`}>
+                      <ul className="mt-1 sm:mt-2 ml-4 sm:ml-6 space-y-1">
                         {item.submenu.map((subItem, subIndex) => (
                           <li key={subIndex}>
                             <button
@@ -217,7 +209,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                                   : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                                 }
                               `}
-                              style={isActive(subItem.path) ? { [`border${isRTL ? 'Right' : 'Left'}`]: '3px solid #2a835f' } : {}}
+                              style={isActive(subItem.path) ? { borderLeft: '3px solid #2a835f' } : {}}
                             >
                               <span>- {subItem.label}</span>
                             </button>
@@ -236,7 +228,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                         : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 hover:shadow-sm'
                       }
                     `}
-                    style={isActive(item.path) ? { [`border${isRTL ? 'Right' : 'Left'}`]: '4px solid #2a835f' } : {}}
+                    style={isActive(item.path) ? { borderLeft: '4px solid #2a835f' } : {}}
                   >
                     <item.icon 
                       className={`w-4 sm:w-5 h-4 sm:h-5 flex-shrink-0 transition-colors duration-200 ${
@@ -255,7 +247,7 @@ const Sidebar: React.FC<SidebarProps> = ({
         {/* Mobile close button */}
         <button
           onClick={onToggle}
-          className={`lg:hidden absolute top-4 sm:top-6 ${isRTL ? 'left-4 sm:left-6' : 'right-4 sm:right-6'} p-2 text-gray-400 hover:text-gray-600 rounded transition-colors`}
+          className="lg:hidden absolute top-4 sm:top-6 right-4 sm:right-6 p-2 text-gray-400 hover:text-gray-600 rounded transition-colors"
         >
           <Menu className="w-4 sm:w-5 h-4 sm:h-5" />
         </button>
