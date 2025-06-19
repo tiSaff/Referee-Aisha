@@ -11,6 +11,7 @@ interface VideoGridProps {
   isRTL: boolean;
   onVideoClick: (video: VideoData) => void;
   onEditClick: (video: VideoData) => void;
+  onDeleteClick?: (video: VideoData) => void;
   formatDate: (dateString: string) => string;
   getStatusBadge: (status: string) => React.ReactNode;
   t: (key: string, params?: Record<string, any>) => string;
@@ -26,6 +27,7 @@ const VideoGrid: React.FC<VideoGridProps> = ({
   isRTL,
   onVideoClick,
   onEditClick,
+  onDeleteClick,
   formatDate,
   getStatusBadge,
   t,
@@ -62,6 +64,7 @@ const VideoGrid: React.FC<VideoGridProps> = ({
               isRTL={isRTL}
               onVideoClick={onVideoClick}
               onEditClick={onEditClick}
+              onDeleteClick={onDeleteClick}
               formatDate={formatDate}
               getStatusBadge={getStatusBadge}
               t={t}

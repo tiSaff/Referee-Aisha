@@ -62,10 +62,28 @@ const VideosPage: React.FC = () => {
     handleSelectVideo(video);
   };
 
-  const handleEditClick = () => {
-    if (currentVideo) {
-      setShowEditModal(true);
-    }
+  const handleEditClick = (video: any) => {
+    handleSelectVideo(video);
+    setShowEditModal(true);
+  };
+
+  // Enhanced delete video with confirmation
+  const handleDeleteVideoWithConfirmation = (video: any) => {
+    showConfirmation({
+      title: 'Delete Video',
+      message: `Are you sure you want to delete the video "${video.title}"? This action cannot be undone and will permanently remove the video file and all associated data including ${video.views.toLocaleString()} views and analysis data.`,
+      confirmText: 'Delete Video',
+      cancelText: 'Cancel',
+      type: 'danger',
+      onConfirm: async () => {
+        // Here you would implement the actual delete functionality
+        console.log('Deleting video:', video.id);
+        // await deleteVideo(video.id);
+        
+        // For now, just show a success message
+        // You can implement the actual delete API call here
+      }
+    });
   };
 
   const handleSaveEdit = async (updatedVideo: any, newVideoFile?: File, isFinalSave: boolean = false) => {
@@ -122,22 +140,6 @@ const VideosPage: React.FC = () => {
     }
   };
 
-  // Enhanced delete video with confirmation
-  const handleDeleteVideoWithConfirmation = (video: any) => {
-    showConfirmation({
-      title: 'Delete Video',
-      message: `Are you sure you want to delete the video "${video.title}"? This action cannot be undone and will permanently remove the video file and all associated data.`,
-      confirmText: 'Delete Video',
-      cancelText: 'Cancel',
-      type: 'danger',
-      onConfirm: async () => {
-        // Here you would implement the actual delete functionality
-        console.log('Deleting video:', video.id);
-        // await deleteVideo(video.id);
-      }
-    });
-  };
-
   const getStatusBadge = (status: string) => {
     const statusStyles = {
       pending: 'bg-yellow-100 text-yellow-800 border-yellow-200',
@@ -172,7 +174,7 @@ const VideosPage: React.FC = () => {
         <VideoDetailsView
           video={currentVideo}
           onClose={() => setShowDetails(false)}
-          onEdit={handleEditClick}
+          onEdit={() => setShowEditModal(true)}
           formatDate={formatDate}
           getStatusBadge={getStatusBadge}
           t={t}
@@ -237,10 +239,8 @@ const VideosPage: React.FC = () => {
         isLoadingMore={false}
         isRTL={isRTL}
         onVideoClick={handleVideoClick}
-        onEditClick={(video) => {
-          handleSelectVideo(video);
-          handleEditClick();
-        }}
+        onEditClick={handleEditClick}
+        onDeleteClick={handleDeleteVideoWithConfirmation}
         formatDate={formatDate}
         getStatusBadge={getStatusBadge}
         t={t}

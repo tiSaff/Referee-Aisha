@@ -1,5 +1,5 @@
-import React from 'react';
-import { Play, Calendar, User, MoreHorizontal } from 'lucide-react';
+import React, { useState, useRef, useEffect } from 'react';
+import { Play, Calendar, User, MoreHorizontal, Eye, Edit, Trash2 } from 'lucide-react';
 import { VideoData } from '../../types';
 
 interface VideoCardProps {
@@ -7,6 +7,7 @@ interface VideoCardProps {
   isRTL: boolean;
   onVideoClick: (video: VideoData) => void;
   onEditClick: (video: VideoData) => void;
+  onDeleteClick?: (video: VideoData) => void;
   formatDate: (dateString: string) => string;
   getStatusBadge: (status: string) => React.ReactNode;
   t: (key: string) => string;
@@ -17,10 +18,55 @@ const VideoCard: React.FC<VideoCardProps> = ({
   isRTL,
   onVideoClick,
   onEditClick,
+  onDeleteClick,
   formatDate,
   getStatusBadge,
   t
 }) => {
+  const [showDropdown, setShowDropdown] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setShowDropdown(false);
+      }
+    };
+
+    if (showDropdown) {
+      document.addEventListener('mousedown', handleClickOutside);
+    }
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [showDropdown]);
+
+  const handleDropdownToggle = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowDropdown(!showDropdown);
+  };
+
+  const handleMenuAction = (action: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    setShowDropdown(false);
+    
+    switch (action) {
+      case 'view':
+        onVideoClick(video);
+        break;
+      case 'edit':
+        onEditClick(video);
+        break;
+      case 'delete':
+        if (onDeleteClick) {
+          onDeleteClick(video);
+        }
+        break;
+    }
+  };
+
   return (
     <div 
       className="group bg-white rounded-xl sm:rounded-2xl shadow-lg border border-gray-100 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:scale-[1.02] cursor-pointer transform"
@@ -41,16 +87,45 @@ const VideoCard: React.FC<VideoCardProps> = ({
           {video.duration}
         </div>
 
-        <div className={`absolute top-2 sm:top-3 ${isRTL ? 'left-2 sm:left-3' : 'right-2 sm:right-3'} opacity-0 group-hover:opacity-100 transition-opacity duration-300`}>
+        {/* Enhanced Dropdown Menu */}
+        <div className={`absolute top-2 sm:top-3 ${isRTL ? 'left-2 sm:left-3' : 'right-2 sm:right-3'} opacity-0 group-hover:opacity-100 transition-opacity duration-300`} ref={dropdownRef}>
           <button 
-            onClick={(e) => {
-              e.stopPropagation();
-              onEditClick(video);
-            }}
-            className="p-1.5 sm:p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 transition-colors"
+            onClick={handleDropdownToggle}
+            className="p-1.5 sm:p-2 bg-white rounded-full shadow-lg hover:bg-gray-50 transition-colors relative z-10"
           >
             <MoreHorizontal className="w-3 sm:w-4 h-3 sm:h-4 text-gray-600" />
           </button>
+          
+          {/* Dropdown Menu */}
+          {showDropdown && (
+            <div className={`absolute ${isRTL ? 'left-0' : 'right-0'} top-full mt-2 bg-white rounded-lg shadow-xl border border-gray-200 py-2 min-w-[140px] z-50 animate-in slide-in-from-top-2 duration-200`}>
+              <button
+                onClick={(e) => handleMenuAction('view', e)}
+                className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-3 transition-colors"
+              >
+                <Eye className="w-4 h-4 text-gray-500" />
+                <span>View</span>
+              </button>
+              
+              <button
+                onClick={(e) => handleMenuAction('edit', e)}
+                className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-3 transition-colors"
+              >
+                <Edit className="w-4 h-4 text-gray-500" />
+                <span>Edit</span>
+              </button>
+              
+              {onDeleteClick && (
+                <button
+                  onClick={(e) => handleMenuAction('delete', e)}
+                  className="w-full px-4 py-2 text-left text-sm text-red-600 hover:bg-red-50 flex items-center space-x-3 transition-colors"
+                >
+                  <Trash2 className="w-4 h-4 text-red-500" />
+                  <span>Delete</span>
+                </button>
+              )}
+            </div>
+          )}
         </div>
 
         <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-all duration-300" />
