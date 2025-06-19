@@ -342,14 +342,14 @@ const UsersPage: React.FC = () => {
       {/* Edit Modal with Multi-Select Role Dropdown - FIXED BACKDROP */}
       {showEditModal && editingUser && (
         <div className="fixed inset-0 z-[9999] overflow-y-auto">
-          {/* Fixed Backdrop */}
+          {/* Fixed Full Screen Backdrop */}
           <div 
-            className="fixed inset-0 bg-black bg-opacity-50"
+            className="fixed inset-0 bg-black bg-opacity-50 min-h-screen"
             onClick={handleCloseEditModal}
           />
           
           {/* Modal Container */}
-          <div className="flex min-h-full items-center justify-center p-4">
+          <div className="flex min-h-screen items-center justify-center p-4">
             <div 
               className="relative bg-white rounded-xl shadow-2xl max-w-md w-full"
               onClick={(e) => e.stopPropagation()}
