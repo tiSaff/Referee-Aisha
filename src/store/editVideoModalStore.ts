@@ -20,6 +20,7 @@ interface EditVideoModalState {
   isUploading: boolean;
   uploadProgress: number;
   explanations: string;
+  notes: string;
   
   // Main photo selection
   mainPhotoType: 'auto' | 'upload';
@@ -47,6 +48,7 @@ interface EditVideoModalState {
   setIsUploading: (isUploading: boolean) => void;
   setUploadProgress: (progress: number) => void;
   setExplanations: (explanations: string) => void;
+  setNotes: (notes: string) => void;
   
   // Main photo actions
   setMainPhotoType: (type: 'auto' | 'upload') => void;
@@ -74,6 +76,7 @@ export const useEditVideoModalStore = create<EditVideoModalState>((set, get) => 
   isUploading: false,
   uploadProgress: 0,
   explanations: '',
+  notes: '',
   
   // Main photo selection
   mainPhotoType: 'auto',
@@ -233,6 +236,7 @@ VAR
   setIsUploading: (isUploading: boolean) => set({ isUploading }),
   setUploadProgress: (progress: number) => set({ uploadProgress: progress }),
   setExplanations: (explanations: string) => set({ explanations }),
+  setNotes: (notes: string) => set({ notes }),
   
   // Main photo setters
   setMainPhotoType: (type: 'auto' | 'upload') => set({ mainPhotoType: type }),
@@ -372,6 +376,7 @@ VAR
       isUploading: false,
       uploadProgress: 0,
       explanations: '',
+      notes: '',
       mainPhotoType: 'auto',
       mainPhotoFile: null,
       decisions: {
@@ -421,6 +426,7 @@ VAR
       isUploading: false,
       uploadProgress: 0,
       explanations: '',
+      notes: '',
       mainPhotoType: 'auto',
       mainPhotoFile: null,
       // Keep current decisions and topic pairs when initializing

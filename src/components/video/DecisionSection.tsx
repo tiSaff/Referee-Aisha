@@ -165,38 +165,39 @@ const DecisionSection: React.FC<DecisionSectionProps> = ({
           
           <div className="space-y-3">
             {cardOptions.map(option => (
-              <DecisionRadio 
-                key={option.key}
-                groupName="card"
-                decisionKey={option.key}
-                label={option.label}
-              />
+              <React.Fragment key={option.key}>
+                <DecisionRadio 
+                  groupName="card"
+                  decisionKey={option.key}
+                  label={option.label}
+                />
+                
+                {/* Show sub-options immediately under their parent */}
+                {option.key === 'noCard' && decisions.noCard && (
+                  <div className="space-y-2 mt-1 mb-3">
+                    <DecisionCheckbox decisionKey="noCard1" label="1" isSubOption />
+                    <DecisionCheckbox decisionKey="noCard2" label="2" isSubOption />
+                  </div>
+                )}
+                
+                {option.key === 'yellowCard' && decisions.yellowCard && (
+                  <div className="space-y-2 mt-1 mb-3">
+                    <DecisionCheckbox decisionKey="yellowCard3" label="3" isSubOption />
+                    <DecisionCheckbox decisionKey="yellowCard4" label="4" isSubOption />
+                    <DecisionCheckbox decisionKey="yellowCard5" label="5" isSubOption />
+                  </div>
+                )}
+                
+                {option.key === 'redCard' && decisions.redCard && (
+                  <div className="space-y-2 mt-1 mb-3">
+                    <DecisionCheckbox decisionKey="redCard6" label="6" isSubOption />
+                    <DecisionCheckbox decisionKey="redCard7" label="7" isSubOption />
+                    <DecisionCheckbox decisionKey="redCard8" label="8" isSubOption />
+                  </div>
+                )}
+              </React.Fragment>
             ))}
           </div>
-          
-          {/* Card Sub-options - remain as checkboxes */}
-          {decisions.noCard && (
-            <div className="space-y-2 mt-2">
-              <DecisionCheckbox decisionKey="noCard1" label="1" isSubOption />
-              <DecisionCheckbox decisionKey="noCard2" label="2" isSubOption />
-            </div>
-          )}
-          
-          {decisions.yellowCard && (
-            <div className="space-y-2 mt-2">
-              <DecisionCheckbox decisionKey="yellowCard3" label="3" isSubOption />
-              <DecisionCheckbox decisionKey="yellowCard4" label="4" isSubOption />
-              <DecisionCheckbox decisionKey="yellowCard5" label="5" isSubOption />
-            </div>
-          )}
-          
-          {decisions.redCard && (
-            <div className="space-y-2 mt-2">
-              <DecisionCheckbox decisionKey="redCard6" label="6" isSubOption />
-              <DecisionCheckbox decisionKey="redCard7" label="7" isSubOption />
-              <DecisionCheckbox decisionKey="redCard8" label="8" isSubOption />
-            </div>
-          )}
         </div>
 
         {/* VAR Column */}
@@ -205,22 +206,23 @@ const DecisionSection: React.FC<DecisionSectionProps> = ({
           
           <div className="space-y-3">
             {varOptions.map(option => (
-              <DecisionRadio 
-                key={option.key}
-                groupName="var"
-                decisionKey={option.key}
-                label={option.label}
-              />
+              <React.Fragment key={option.key}>
+                <DecisionRadio 
+                  groupName="var"
+                  decisionKey={option.key}
+                  label={option.label}
+                />
+                
+                {/* Show VAR Yes sub-options immediately under VAR Yes */}
+                {option.key === 'varYes' && decisions.varYes && (
+                  <div className="space-y-2 mt-1 mb-3">
+                    <DecisionCheckbox decisionKey="varYesOFR" label="OFR" isSubOption />
+                    <DecisionCheckbox decisionKey="varYesVAROnly" label="VAR Only" isSubOption />
+                  </div>
+                )}
+              </React.Fragment>
             ))}
           </div>
-          
-          {/* VAR Yes Sub-options - remain as checkboxes */}
-          {decisions.varYes && (
-            <div className="space-y-2 mt-2">
-              <DecisionCheckbox decisionKey="varYesOFR" label="OFR" isSubOption />
-              <DecisionCheckbox decisionKey="varYesVAROnly" label="VAR Only" isSubOption />
-            </div>
-          )}
         </div>
       </div>
     </div>

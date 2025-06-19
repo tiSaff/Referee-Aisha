@@ -38,6 +38,7 @@ const EditVideoModal: React.FC<EditVideoModalProps> = ({
     isUploading,
     uploadProgress,
     explanations,
+    notes,
     decisions,
     topicPairs,
     topicsSystem,
@@ -47,6 +48,7 @@ const EditVideoModal: React.FC<EditVideoModalProps> = ({
     setIsUploading,
     setUploadProgress,
     setExplanations,
+    setNotes,
     setDecision,
     addTopicPair,
     removeTopicPair,
@@ -243,10 +245,12 @@ const EditVideoModal: React.FC<EditVideoModalProps> = ({
               onDecisionChange={setDecision}
             />
 
-            {/* Explanations - Full Width */}
+            {/* Explanations & Notes - Full Width */}
             <ExplanationsSection
               explanations={explanations}
               onExplanationsChange={setExplanations}
+              notes={notes}
+              onNotesChange={setNotes}
             />
 
             {/* Action Buttons */}
