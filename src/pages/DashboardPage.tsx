@@ -115,7 +115,7 @@ const DashboardPage: React.FC = () => {
               <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
                 <div className="text-center lg:text-left">
                   <div className="flex items-center justify-center lg:justify-start space-x-2 mb-1">
-                    <UserCheck className="w-4 h-4 text-blue-600" />
+                    <UserCheck className="w-4 h-4 text-teal-600" />
                     <span className="text-lg font-bold text-gray-900">{dashboardData.stats.totalUsers}</span>
                   </div>
                   <p className="text-xs text-gray-600">Active Users</p>
@@ -123,7 +123,7 @@ const DashboardPage: React.FC = () => {
                 
                 <div className="text-center lg:text-left">
                   <div className="flex items-center justify-center lg:justify-start space-x-2 mb-1">
-                    <Video className="w-4 h-4 text-purple-600" />
+                    <Video className="w-4 h-4 text-blue-600" />
                     <span className="text-lg font-bold text-gray-900">{dashboardData.stats.totalVideos}</span>
                   </div>
                   <p className="text-xs text-gray-600">Total Videos</p>
@@ -131,7 +131,7 @@ const DashboardPage: React.FC = () => {
                 
                 <div className="text-center lg:text-left">
                   <div className="flex items-center justify-center lg:justify-start space-x-2 mb-1">
-                    <Clock className="w-4 h-4 text-orange-600" />
+                    <Clock className="w-4 h-4 text-amber-600" />
                     <span className="text-lg font-bold text-gray-900">{dashboardData.stats.pendingVideos}</span>
                   </div>
                   <p className="text-xs text-gray-600">Pending Review</p>
@@ -139,7 +139,7 @@ const DashboardPage: React.FC = () => {
                 
                 <div className="text-center lg:text-left">
                   <div className="flex items-center justify-center lg:justify-start space-x-2 mb-1">
-                    <Eye className="w-4 h-4 text-green-600" />
+                    <Eye className="w-4 h-4 text-emerald-600" />
                     <span className="text-lg font-bold text-gray-900">{dashboardData.stats.totalViews.toLocaleString()}</span>
                   </div>
                   <p className="text-xs text-gray-600">Total Views</p>
@@ -155,15 +155,15 @@ const DashboardPage: React.FC = () => {
             <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm hover:shadow-md transition-all duration-300">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
-                    <Play className="w-5 h-5 text-blue-600" />
+                  <div className="w-10 h-10 bg-teal-50 rounded-lg flex items-center justify-center">
+                    <Play className="w-5 h-5 text-teal-600" />
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">Top Videos</h3>
                     <p className="text-sm text-gray-600">Most watched content</p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-1 text-green-600 bg-green-50 px-2 py-1 rounded-md">
+                <div className="flex items-center space-x-1 text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md">
                   <ArrowUp className="w-3 h-3" />
                   <span className="text-xs font-medium">+24%</span>
                 </div>
@@ -179,15 +179,15 @@ const DashboardPage: React.FC = () => {
                       <div className="flex items-center justify-between mb-2">
                         <div className="flex items-center space-x-3">
                           <div className={`w-6 h-6 rounded-md flex items-center justify-center text-white font-medium text-xs ${
-                            index === 0 ? 'bg-blue-500' :
-                            index === 1 ? 'bg-purple-500' :
+                            index === 0 ? 'bg-teal-500' :
+                            index === 1 ? 'bg-blue-500' :
                             index === 2 ? 'bg-indigo-500' :
                             'bg-gray-500'
                           }`}>
                             {index + 1}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <h4 className="text-sm font-medium text-gray-900 truncate group-hover:text-blue-600 transition-colors" title={video.title}>
+                            <h4 className="text-sm font-medium text-gray-900 truncate group-hover:text-teal-600 transition-colors" title={video.title}>
                               {video.title}
                             </h4>
                             <p className="text-xs text-gray-500">by {video.uploadedBy}</p>
@@ -200,7 +200,7 @@ const DashboardPage: React.FC = () => {
                       </div>
                       <div className="w-full bg-gray-100 rounded-full h-1.5">
                         <div
-                          className="bg-blue-500 h-1.5 rounded-full transition-all duration-1000 ease-out"
+                          className="bg-teal-500 h-1.5 rounded-full transition-all duration-1000 ease-out"
                           style={{ width: `${percentage}%` }}
                         />
                       </div>
@@ -214,8 +214,8 @@ const DashboardPage: React.FC = () => {
             <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm hover:shadow-md transition-all duration-300">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-purple-50 rounded-lg flex items-center justify-center">
-                    <Video className="w-5 h-5 text-purple-600" />
+                  <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center">
+                    <Video className="w-5 h-5 text-blue-600" />
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">Video Status</h3>
@@ -247,7 +247,7 @@ const DashboardPage: React.FC = () => {
                       cy="50"
                       r="35"
                       fill="none"
-                      stroke="#10b981"
+                      stroke="#14b8a6"
                       strokeWidth="8"
                       strokeDasharray={`${(dashboardData.stats.totalVideos - dashboardData.stats.pendingVideos) / dashboardData.stats.totalVideos * 220} 220`}
                       strokeLinecap="round"
@@ -281,9 +281,9 @@ const DashboardPage: React.FC = () => {
               </div>
 
               <div className="grid grid-cols-2 gap-3">
-                <div className="bg-green-50 rounded-lg p-3 border border-green-100">
+                <div className="bg-teal-50 rounded-lg p-3 border border-teal-100">
                   <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 bg-green-500 rounded-full"></div>
+                    <div className="w-3 h-3 bg-teal-500 rounded-full"></div>
                     <div>
                       <div className="text-sm font-bold text-gray-900">{dashboardData.stats.totalVideos - dashboardData.stats.pendingVideos}</div>
                       <div className="text-xs text-gray-600">Published</div>
@@ -291,9 +291,9 @@ const DashboardPage: React.FC = () => {
                   </div>
                 </div>
                 
-                <div className="bg-yellow-50 rounded-lg p-3 border border-yellow-100">
+                <div className="bg-amber-50 rounded-lg p-3 border border-amber-100">
                   <div className="flex items-center space-x-2">
-                    <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
+                    <div className="w-3 h-3 bg-amber-500 rounded-full"></div>
                     <div>
                       <div className="text-sm font-bold text-gray-900">{dashboardData.stats.pendingVideos}</div>
                       <div className="text-xs text-gray-600">Pending</div>
@@ -323,14 +323,14 @@ const DashboardPage: React.FC = () => {
 
               <div className="space-y-3 max-h-64 overflow-y-auto">
                 {[
-                  { country: 'Uzbekistan', users: 45, flag: '🇺🇿' },
-                  { country: 'Oman', users: 38, flag: '🇴🇲' },
-                  { country: 'Malaysia', users: 35, flag: '🇲🇾' },
-                  { country: 'Spain', users: 32, flag: '🇪🇸' },
-                  { country: 'United States', users: 28, flag: '🇺🇸' },
-                  { country: 'United Kingdom', users: 25, flag: '🇬🇧' },
-                  { country: 'Germany', users: 22, flag: '🇩🇪' },
-                  { country: 'France', users: 18, flag: '🇫🇷' }
+                  { country: 'Uzbekistan', users: 45, flag: '🇺🇿', color: 'bg-blue-500' },
+                  { country: 'Oman', users: 38, flag: '🇴🇲', color: 'bg-teal-500' },
+                  { country: 'Malaysia', users: 35, flag: '🇲🇾', color: 'bg-emerald-500' },
+                  { country: 'Spain', users: 32, flag: '🇪🇸', color: 'bg-cyan-500' },
+                  { country: 'United States', users: 28, flag: '🇺🇸', color: 'bg-indigo-500' },
+                  { country: 'United Kingdom', users: 25, flag: '🇬🇧', color: 'bg-purple-500' },
+                  { country: 'Germany', users: 22, flag: '🇩🇪', color: 'bg-pink-500' },
+                  { country: 'France', users: 18, flag: '🇫🇷', color: 'bg-rose-500' }
                 ].map((item, index) => {
                   const maxUsers = 45;
                   const percentage = (item.users / maxUsers) * 100;
@@ -344,7 +344,7 @@ const DashboardPage: React.FC = () => {
                       <div className="flex-1 relative">
                         <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                           <div
-                            className="h-full bg-indigo-500 rounded-full transition-all duration-1000 ease-out"
+                            className={`h-full ${item.color} rounded-full transition-all duration-1000 ease-out`}
                             style={{ width: `${percentage}%` }}
                           />
                         </div>
@@ -362,15 +362,15 @@ const DashboardPage: React.FC = () => {
             <div className="bg-white rounded-lg border border-gray-200 p-6 shadow-sm hover:shadow-md transition-all duration-300">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center">
-                    <Monitor className="w-5 h-5 text-gray-600" />
+                  <div className="w-10 h-10 bg-slate-50 rounded-lg flex items-center justify-center">
+                    <Monitor className="w-5 h-5 text-slate-600" />
                   </div>
                   <div>
                     <h3 className="text-lg font-semibold text-gray-900">Site Analytics</h3>
                     <p className="text-sm text-gray-600">Monthly platform visits</p>
                   </div>
                 </div>
-                <div className="flex items-center space-x-1 text-green-600 bg-green-50 px-2 py-1 rounded-md">
+                <div className="flex items-center space-x-1 text-emerald-600 bg-emerald-50 px-2 py-1 rounded-md">
                   <TrendingUp className="w-3 h-3" />
                   <span className="text-xs font-medium">+18%</span>
                 </div>
@@ -378,12 +378,12 @@ const DashboardPage: React.FC = () => {
 
               <div className="flex items-end justify-between space-x-2 h-40 mb-4">
                 {[
-                  { month: 'Jan', visits: 12500 },
-                  { month: 'Feb', visits: 15200 },
-                  { month: 'Mar', visits: 11800 },
-                  { month: 'Apr', visits: 18600 },
-                  { month: 'May', visits: 16400 },
-                  { month: 'Jun', visits: 21300 }
+                  { month: 'Jan', visits: 12500, color: 'bg-blue-400' },
+                  { month: 'Feb', visits: 15200, color: 'bg-teal-400' },
+                  { month: 'Mar', visits: 11800, color: 'bg-emerald-400' },
+                  { month: 'Apr', visits: 18600, color: 'bg-cyan-400' },
+                  { month: 'May', visits: 16400, color: 'bg-indigo-400' },
+                  { month: 'Jun', visits: 21300, color: 'bg-purple-400' }
                 ].map((item, index) => {
                   const maxVisits = 21300;
                   const height = (item.visits / maxVisits) * 100;
@@ -392,7 +392,7 @@ const DashboardPage: React.FC = () => {
                     <div key={index} className="flex flex-col items-center flex-1 group">
                       <div className="w-full flex items-end justify-center h-32 mb-2">
                         <div
-                          className="w-full bg-gray-400 rounded-t transition-all duration-700 hover:bg-gray-500 cursor-pointer relative group-hover:scale-105"
+                          className={`w-full ${item.color} rounded-t transition-all duration-700 hover:opacity-80 cursor-pointer relative group-hover:scale-105`}
                           style={{ height: `${height}%` }}
                           title={`${item.month}: ${item.visits.toLocaleString()} visits`}
                         >
@@ -420,12 +420,13 @@ const DashboardPage: React.FC = () => {
                     const visits = [3200, 2800, 3600, 4100, 3900, 2400, 1800][index];
                     const maxWeeklyVisits = 4100;
                     const height = (visits / maxWeeklyVisits) * 100;
+                    const colors = ['bg-blue-300', 'bg-teal-300', 'bg-emerald-300', 'bg-cyan-300', 'bg-indigo-300', 'bg-purple-300', 'bg-pink-300'];
                     
                     return (
                       <div key={day} className="text-center">
                         <div className="h-12 flex items-end justify-center mb-1">
                           <div
-                            className="w-4 bg-gray-300 rounded-t transition-all duration-500"
+                            className={`w-4 ${colors[index]} rounded-t transition-all duration-500`}
                             style={{ height: `${height}%` }}
                           />
                         </div>
