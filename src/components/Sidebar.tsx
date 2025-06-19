@@ -76,6 +76,9 @@ const Sidebar: React.FC<SidebarProps> = ({
 
   const handleNavigation = (path: string) => {
     navigate(path);
+    if (window.innerWidth < 1024) {
+      onToggle();
+    }
   };
 
   const handleSubmenuClick = (path: string, parentPath: string) => {
@@ -85,6 +88,10 @@ const Sidebar: React.FC<SidebarProps> = ({
       setLogsExpanded(true);
     } else if (parentPath === PATHS.ADD_TOPIC) {
       setSettingsExpanded(true);
+    }
+    
+    if (window.innerWidth < 1024) {
+      onToggle();
     }
   };
 

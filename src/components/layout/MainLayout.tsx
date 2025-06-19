@@ -29,13 +29,13 @@ const MainLayout: React.FC = () => {
 
   return (
     <div
-      className="min-h-screen flex flex-col w-full overflow-hidden"
+      className="min-h-screen flex flex-col w-full"
       dir={isRTL ? 'rtl' : 'ltr'}
     >
       {/* Header */}
       <Header onToggleSidebar={toggleSidebar} />
       
-      <div className="flex flex-1">
+      <div className="flex flex-1 overflow-hidden">
         {/* Sidebar */}
         <Sidebar
           isOpen={sidebarOpen}
@@ -44,7 +44,7 @@ const MainLayout: React.FC = () => {
         />
 
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col min-w-0">
+        <div className="flex-1 flex flex-col min-w-0 overflow-auto">
           <main className="flex-1 p-4 sm:p-6 min-w-0 bg-gray-50">
             <Outlet />
           </main>
