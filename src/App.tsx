@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import Routing from './components/routing/Routing';
+import ErrorBoundary from './components/common/ErrorBoundary';
 import './i18n';
 
 function App() {
@@ -27,9 +28,11 @@ function App() {
   }, [i18n.language, isRTL]);
 
   return (
-    <BrowserRouter basename="">
-      <Routing />
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter basename="">
+        <Routing />
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }
 

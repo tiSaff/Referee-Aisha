@@ -12,6 +12,8 @@ import NotificationsPage from '../../pages/NotificationsPage';
 import AddTopicPage from '../../pages/AddTopicPage';
 import LogsPage from '../../pages/LogsPage';
 import LoginSaff from '../../pages/LoginSaff';
+import NotFoundPage from '../../pages/NotFoundPage';
+import InternalServerErrorPage from '../../pages/InternalServerErrorPage';
 import MainLayout from '../layout/MainLayout';
 
 export default function Routing() {
@@ -26,6 +28,9 @@ export default function Routing() {
       {/* Login Route */}
       <Route path={PATHS.LOGINMY} element={<LoginSaff />} />
       <Route path={PATHS.LOGIN} element={<LoginSaff />} />
+      
+      {/* Error Pages */}
+      <Route path="/500" element={<InternalServerErrorPage />} />
       
       {/* Main Application Routes with Layout */}
       <Route path="/" element={<MainLayout />}>
@@ -42,8 +47,8 @@ export default function Routing() {
         <Route path={PATHS.ERROR_LOGS} element={<LogsPage />} />
       </Route>
       
-      {/* Catch all route */}
-      <Route path="*" element={<Navigate to={PATHS.DASHBOARD} replace />} />
+      {/* 404 - Catch all route (must be last) */}
+      <Route path="*" element={<NotFoundPage />} />
     </Routes>
   );
 }
