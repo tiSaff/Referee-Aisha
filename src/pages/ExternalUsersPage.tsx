@@ -20,6 +20,7 @@ import AddExternalUserModal from '../components/external-users/AddExternalUserMo
 import DeleteUserModal from '../components/users/DeleteUserModal';
 import Pagination from '../components/common/Pagination';
 import PageAlert from '../components/common/PageAlert';
+import Button from '../components/common/Button';
 
 const ExternalUsersPage: React.FC = () => {
   const { currentLanguage } = useLanguageStore();
