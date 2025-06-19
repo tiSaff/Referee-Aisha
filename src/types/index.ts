@@ -55,6 +55,15 @@ export interface Notification {
   recipients: number;
 }
 
+export interface LogEntry {
+  id: number;
+  user: string;
+  action: string;
+  description: string;
+  ipAddress: string;
+  timestamp: string;
+}
+
 export interface Topic {
   id: string;
   name: string;

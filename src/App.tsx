@@ -8,6 +8,7 @@ import VideosPage from './pages/VideosPage';
 import AddTopicPage from './pages/AddTopicPage';
 import NotificationsPage from './pages/NotificationsPage';
 import ExternalUsersPage from './pages/ExternalUsersPage';
+import LogsPage from './pages/LogsPage';
 import GlobalConfirmationModal from './components/common/GlobalConfirmationModal';
 import { useUIStore } from './store/uiStore';
 import { useLanguageStore } from './store/languageStore';
@@ -69,6 +70,10 @@ function App() {
         return t('notifications.title');
       case 'add-topic':
         return t('addTopic.title');
+      case 'system-logs':
+      case 'user-logs':
+      case 'error-logs':
+        return 'System Logs';
       default:
         return t('videos.title');
     }
@@ -84,6 +89,10 @@ function App() {
         return <AddTopicPage />;
       case 'notifications':
         return <NotificationsPage />;
+      case 'system-logs':
+      case 'user-logs':
+      case 'error-logs':
+        return <LogsPage />;
       default:
         return <VideosPage />;
     }
