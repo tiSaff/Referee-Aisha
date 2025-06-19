@@ -19,11 +19,7 @@ const DecisionSection: React.FC<DecisionSectionProps> = ({
     { key: 'indirectFreeKick', label: 'Indirect Free Kick' },
     { key: 'directFreeKick', label: 'Direct Free Kick' },
     { key: 'penaltyKick', label: 'Penalty Kick' },
-    { key: 'goal', label: 'Goal' }
-  ];
-
-  // Group offside decisions for radio button implementation
-  const offsideOptions = [
+    { key: 'goal', label: 'Goal' },
     { key: 'offside', label: 'Offside' },
     { key: 'noOffside', label: 'No Offside' }
   ];
@@ -46,7 +42,6 @@ const DecisionSection: React.FC<DecisionSectionProps> = ({
     // First, set all options in the group to false
     const groupOptions = {
       'basicDecision': basicDecisionOptions,
-      'offside': offsideOptions,
       'card': cardOptions,
       'var': varOptions
     }[groupName];
@@ -68,9 +63,8 @@ const DecisionSection: React.FC<DecisionSectionProps> = ({
     groupName: string;
     decisionKey: string; 
     label: string;
-    isSubOption?: boolean;
-  }> = ({ groupName, decisionKey, label, isSubOption = false }) => (
-    <label className={`flex items-center space-x-3 cursor-pointer group ${isSubOption ? 'ml-6' : ''}`}>
+  }> = ({ groupName, decisionKey, label }) => (
+    <label className="flex items-center space-x-3 cursor-pointer group">
       <input
         type="radio"
         name={groupName}
@@ -82,9 +76,7 @@ const DecisionSection: React.FC<DecisionSectionProps> = ({
           accentColor: '#2a835f'
         } as React.CSSProperties}
       />
-      <span className={`text-sm text-gray-700 group-hover:text-gray-900 transition-colors duration-200 ${
-        isSubOption ? 'text-gray-600 group-hover:text-gray-800' : ''
-      }`}>
+      <span className="text-sm text-gray-700 group-hover:text-gray-900 transition-colors duration-200">
         {label}
       </span>
     </label>
@@ -115,6 +107,9 @@ const DecisionSection: React.FC<DecisionSectionProps> = ({
     </label>
   );
 
+  // Check if offside is selected to hide cards section
+  const isOffsideSelected = decisions.offside;
+
   return (
     <div className="border-t border-gray-200 pt-8">
       <h3 className="text-lg font-semibold text-gray-900 mb-6">Decision</h3>
@@ -124,81 +119,70 @@ const DecisionSection: React.FC<DecisionSectionProps> = ({
         <div className="space-y-4">
           <h4 className="font-medium text-gray-700 text-base">Basic Decisions</h4>
           <div className="space-y-3">
+            {/* Basic decision radio buttons */}
             {basicDecisionOptions.map(option => (
-              <DecisionRadio 
-                key={option.key}
-                groupName="basicDecision"
-                decisionKey={option.key}
-                label={option.label}
-              />
-            ))}
-          </div>
-
-          {/* Offside Section */}
-          <div className="pt-4 border-t border-gray-100">
-            <h5 className="font-medium text-gray-700 text-sm mb-3">Offside</h5>
-            <div className="space-y-2">
-              {offsideOptions.map(option => (
-                <DecisionRadio 
-                  key={option.key}
-                  groupName="offside"
-                  decisionKey={option.key}
-                  label={option.label}
-                />
-              ))}
-              
-              {/* Offside Sub-options - remain as checkboxes */}
-              {decisions.offside && (
-                <div className="space-y-2 mt-2">
-                  <DecisionCheckbox decisionKey="offsideInterferingPlay" label="Interfering with Play" isSubOption />
-                  <DecisionCheckbox decisionKey="offsideInterferingOpponent" label="Interfering with an Opponent" isSubOption />
-                  <DecisionCheckbox decisionKey="offsideGainingAdvantage" label="Gaining an Advantage" isSubOption />
-                </div>
-              )}
-            </div>
-          </div>
-        </div>
-
-        {/* Cards Column */}
-        <div className="space-y-4">
-          <h4 className="font-medium text-gray-700 text-base">Cards</h4>
-          
-          <div className="space-y-3">
-            {cardOptions.map(option => (
               <React.Fragment key={option.key}>
                 <DecisionRadio 
-                  groupName="card"
+                  groupName="basicDecision"
                   decisionKey={option.key}
                   label={option.label}
                 />
                 
-                {/* Show sub-options immediately under their parent */}
-                {option.key === 'noCard' && decisions.noCard && (
+                {/* Show offside sub-options immediately under offside */}
+                {option.key === 'offside' && decisions.offside && (
                   <div className="space-y-2 mt-1 mb-3">
-                    <DecisionCheckbox decisionKey="noCard1" label="1" isSubOption />
-                    <DecisionCheckbox decisionKey="noCard2" label="2" isSubOption />
-                  </div>
-                )}
-                
-                {option.key === 'yellowCard' && decisions.yellowCard && (
-                  <div className="space-y-2 mt-1 mb-3">
-                    <DecisionCheckbox decisionKey="yellowCard3" label="3" isSubOption />
-                    <DecisionCheckbox decisionKey="yellowCard4" label="4" isSubOption />
-                    <DecisionCheckbox decisionKey="yellowCard5" label="5" isSubOption />
-                  </div>
-                )}
-                
-                {option.key === 'redCard' && decisions.redCard && (
-                  <div className="space-y-2 mt-1 mb-3">
-                    <DecisionCheckbox decisionKey="redCard6" label="6" isSubOption />
-                    <DecisionCheckbox decisionKey="redCard7" label="7" isSubOption />
-                    <DecisionCheckbox decisionKey="redCard8" label="8" isSubOption />
+                    <DecisionCheckbox decisionKey="offsideInterferingPlay" label="Interfering with Play" isSubOption />
+                    <DecisionCheckbox decisionKey="offsideInterferingOpponent" label="Interfering with an Opponent" isSubOption />
+                    <DecisionCheckbox decisionKey="offsideGainingAdvantage" label="Gaining an Advantage" isSubOption />
                   </div>
                 )}
               </React.Fragment>
             ))}
           </div>
         </div>
+
+        {/* Cards Column - Only show if offside is not selected */}
+        {!isOffsideSelected && (
+          <div className="space-y-4">
+            <h4 className="font-medium text-gray-700 text-base">Cards</h4>
+            
+            <div className="space-y-3">
+              {cardOptions.map(option => (
+                <React.Fragment key={option.key}>
+                  <DecisionRadio 
+                    groupName="card"
+                    decisionKey={option.key}
+                    label={option.label}
+                  />
+                  
+                  {/* Show sub-options immediately under their parent */}
+                  {option.key === 'noCard' && decisions.noCard && (
+                    <div className="space-y-2 mt-1 mb-3">
+                      <DecisionCheckbox decisionKey="noCard1" label="1" isSubOption />
+                      <DecisionCheckbox decisionKey="noCard2" label="2" isSubOption />
+                    </div>
+                  )}
+                  
+                  {option.key === 'yellowCard' && decisions.yellowCard && (
+                    <div className="space-y-2 mt-1 mb-3">
+                      <DecisionCheckbox decisionKey="yellowCard3" label="3" isSubOption />
+                      <DecisionCheckbox decisionKey="yellowCard4" label="4" isSubOption />
+                      <DecisionCheckbox decisionKey="yellowCard5" label="5" isSubOption />
+                    </div>
+                  )}
+                  
+                  {option.key === 'redCard' && decisions.redCard && (
+                    <div className="space-y-2 mt-1 mb-3">
+                      <DecisionCheckbox decisionKey="redCard6" label="6" isSubOption />
+                      <DecisionCheckbox decisionKey="redCard7" label="7" isSubOption />
+                      <DecisionCheckbox decisionKey="redCard8" label="8" isSubOption />
+                    </div>
+                  )}
+                </React.Fragment>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* VAR Column */}
         <div className="space-y-4">

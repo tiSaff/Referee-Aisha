@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Upload } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Upload, X } from 'lucide-react';
 import { VideoData } from '../../types';
 import { useEditVideoModalStore } from '../../store/editVideoModalStore';
 
@@ -20,7 +20,7 @@ const VideoDetailsForm: React.FC<VideoDetailsFormProps> = ({
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
   
   // File input reference
-  const fileInputRef = React.useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   
   // Handle photo type change
   const handlePhotoTypeChange = (type: 'auto' | 'upload') => {
