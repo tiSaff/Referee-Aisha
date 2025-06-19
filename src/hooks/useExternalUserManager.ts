@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useExternalUserStore } from '../store/externalUserStore';
 import { useUIStore } from '../store/uiStore';
+import { useAlertStore } from '../store/alertStore';
 import { User } from '../types';
 
 export const useExternalUserManager = () => {
@@ -16,6 +17,7 @@ export const useExternalUserManager = () => {
     activeTab,
     fetchUsers,
     getUserById,
+    createUser,
     updateUser,
     deleteUser,
     setSelectedUser,
@@ -30,7 +32,16 @@ export const useExternalUserManager = () => {
     getUserStats,
   } = useExternalUserStore();
 
-  const { setModalState } = useUIStore();
+  const { 
+    setModalState,
+    showAddExternalUserModal,
+    showEditExternalUserModal,
+    showDeleteExternalUserModal,
+    showExternalUserProfileModal
+  } = useUIStore();
+
+  // Alert store for success messages
+  const { showAlert } = useAlertStore();
 
   // Initialize users on mount
   useEffect(() => {
@@ -57,6 +68,24 @@ export const useExternalUserManager = () => {
     setModalState('showDeleteExternalUserModal', true);
   };
 
+  const handleAddUser = () => {
+    setModalState('showAddExternalUserModal', true);
+  };
+
+  const handleCreateUser = async (userData: Partial<User>) => {
+    try {
+      const newUser = await createUser(userData);
+      setModalState('showAddExternalUserModal', false);
+      
+      // Show success alert
+      showAlert(`User "${newUser.name}" created successfully!`);
+      return true;
+    } catch (error) {
+      console.error('Error creating user:', error);
+      return false;
+    }
+  };
+
   const handleSaveUser = async () => {
     if (editingUser) {
       console.log('Saving user:', editingUser);
@@ -69,14 +98,25 @@ export const useExternalUserManager = () => {
       
       await updateUser(editingUser.id, updatedUser);
       setModalState('showEditExternalUserModal', false);
+      
+      // Show success alert
+      showAlert(`User "${updatedUser.name}" updated successfully!`);
     }
   };
 
   const handleConfirmDelete = async () => {
     if (userToDelete) {
+      const userName = userToDelete.name;
       await deleteUser(userToDelete.id);
       setModalState('showDeleteExternalUserModal', false);
+      
+      // Show success alert
+      showAlert(`User "${userName}" deleted successfully!`);
     }
+  };
+
+  const closeAddModal = () => {
+    setModalState('showAddExternalUserModal', false);
   };
 
   const closeEditModal = () => {
@@ -104,15 +144,20 @@ export const useExternalUserManager = () => {
     userStats,
     totalUsers: users.length,
     filteredCount: filteredUsers.length,
-    showEditModal: !!editingUser,
-    showDeleteModal: !!userToDelete,
+    showAddModal: showAddExternalUserModal,
+    showEditModal: showEditExternalUserModal,
+    showDeleteModal: showDeleteExternalUserModal,
+    showProfileModal: showExternalUserProfileModal,
     
     // Actions
     handleViewUser,
     handleEditUser,
     handleDeleteUser,
+    handleAddUser,
+    handleCreateUser,
     handleSaveUser,
     handleConfirmDelete,
+    closeAddModal,
     closeEditModal,
     closeDeleteModal,
     setSearchTerm,

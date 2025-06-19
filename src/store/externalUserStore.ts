@@ -15,6 +15,7 @@ interface ExternalUserState {
   // Actions
   fetchUsers: () => Promise<void>;
   getUserById: (id: number) => Promise<void>;
+  createUser: (userData: Partial<User>) => Promise<void>;
   updateUser: (id: number, userData: Partial<User>) => Promise<void>;
   deleteUser: (id: number) => Promise<void>;
   setSelectedUser: (user: User | null) => void;
@@ -225,6 +226,54 @@ export const useExternalUserStore = create<ExternalUserState>((set, get) => ({
     } catch (error) {
       const apiError = error as ApiError;
       set({ error: apiError.message, loading: false });
+    }
+  },
+
+  createUser: async (userData: Partial<User>) => {
+    set({ loading: true, error: null });
+    try {
+      // Generate a new ID (in a real app, this would be done by the backend)
+      const newId = Math.max(...get().users.map(u => u.id), 0) + 1;
+      
+      // Create a new user with default values
+      const newUser: User = {
+        id: newId,
+        name: `${userData.firstName} ${userData.lastName}`.trim(),
+        firstName: userData.firstName || '',
+        lastName: userData.lastName || '',
+        email: userData.email || '',
+        status: 'active',
+        joinDate: new Date().toISOString().split('T')[0],
+        lastActive: new Date().toISOString().replace('T', ' ').substring(0, 19),
+        location: '',
+        phone: userData.phone || '',
+        videosAnalyzed: 0,
+        department: userData.department || '',
+        permissions: {
+          videoPendingPermission: true,
+          videoUnderReviewPermission: false,
+          videoAcceptedPermission: true,
+          uploadVideoPermission: false,
+          settingsAddConsiderationsPermission: false,
+          settingsAddTopicPermission: false,
+          addNotification: false,
+          viewUsersExternal: false,
+          accountResponsibleForAddingUsers: false,
+          accountIsActive: true
+        }
+      };
+      
+      // Add the new user to the store
+      set({ 
+        users: [...get().users, newUser],
+        loading: false 
+      });
+      
+      return newUser;
+    } catch (error) {
+      const apiError = error as ApiError;
+      set({ error: apiError.message, loading: false });
+      throw error;
     }
   },
 

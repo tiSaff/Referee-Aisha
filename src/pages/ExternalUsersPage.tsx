@@ -1,5 +1,5 @@
 import React from 'react';
-import { Users as UsersIcon, Download } from 'lucide-react';
+import { Users as UsersIcon, Download, UserPlus } from 'lucide-react';
 import { useExternalUserManager } from '../hooks/useExternalUserManager';
 import { useLanguageStore } from '../store/languageStore';
 import { usePagination } from '../hooks/usePagination';
@@ -16,6 +16,7 @@ import EmptyState from '../components/common/EmptyState';
 import ExternalUserTabs from '../components/external-users/ExternalUserTabs';
 import ExternalUserProfileModal from '../components/external-users/ExternalUserProfileModal';
 import ExternalUserEditModal from '../components/external-users/ExternalUserEditModal';
+import AddExternalUserModal from '../components/external-users/AddExternalUserModal';
 import DeleteUserModal from '../components/users/DeleteUserModal';
 import Pagination from '../components/common/Pagination';
 import PageAlert from '../components/common/PageAlert';
@@ -42,13 +43,17 @@ const ExternalUsersPage: React.FC = () => {
     filteredCount,
     editingUser,
     userToDelete,
+    showAddModal,
     showEditModal,
     showDeleteModal,
     handleViewUser,
     handleEditUser,
     handleDeleteUser,
+    handleAddUser,
+    handleCreateUser,
     handleSaveUser,
     handleConfirmDelete,
+    closeAddModal,
     closeEditModal,
     closeDeleteModal,
     setSearchTerm,
@@ -75,12 +80,6 @@ const ExternalUsersPage: React.FC = () => {
   // Enhanced save user with success alert
   const handleSaveUserWithAlert = async () => {
     await handleSaveUser();
-    
-    // Show success alert after successful save
-    if (editingUser) {
-      const { showAlert } = useAlertStore.getState();
-      showAlert(`External user "${editingUser.name}" updated successfully!`);
-    }
   };
 
   // Enhanced delete user with confirmation and success alert
@@ -92,12 +91,7 @@ const ExternalUsersPage: React.FC = () => {
       cancelText: 'Cancel',
       type: 'danger',
       onConfirm: async () => {
-        const userName = user.name;
         await handleConfirmDelete();
-        
-        // Show success alert after successful delete
-        const { showAlert } = useAlertStore.getState();
-        showAlert(`External user "${userName}" deleted successfully!`);
       }
     });
   };
@@ -156,9 +150,9 @@ const ExternalUsersPage: React.FC = () => {
         icon={UsersIcon}
         count={totalUsers}
         actionButton={{
-          label: "Export Users",
-          onClick: handleExportUsers,
-          icon: Download
+          label: "Add User",
+          onClick: handleAddUser,
+          icon: UserPlus
         }}
       />
 
@@ -171,7 +165,17 @@ const ExternalUsersPage: React.FC = () => {
             className="flex-1"
           />
           
-          <ViewToggle viewMode={viewMode} onViewModeChange={setViewMode} />
+          <div className="flex items-center space-x-3">
+            <Button 
+              variant="secondary" 
+              onClick={handleExportUsers}
+              className="flex items-center space-x-2"
+            >
+              <Download className="w-4 h-4" />
+              <span>Export</span>
+            </Button>
+            <ViewToggle viewMode={viewMode} onViewModeChange={setViewMode} />
+          </div>
         </div>
       </div>
 
@@ -227,10 +231,14 @@ const ExternalUsersPage: React.FC = () => {
           actionButton={searchTerm ? {
             label: "Clear Search",
             onClick: () => setSearchTerm('')
-          } : undefined}
+          } : {
+            label: "Add User",
+            onClick: handleAddUser
+          }}
         />
       )}
 
+      {/* Modals */}
       <ExternalUserProfileModal />
       
       <ExternalUserEditModal
@@ -239,6 +247,21 @@ const ExternalUsersPage: React.FC = () => {
         user={editingUser}
         onSave={handleSaveUserWithAlert}
         onFieldChange={updateEditingUserField}
+        loading={loading}
+      />
+
+      <AddExternalUserModal
+        isOpen={showAddModal}
+        onClose={closeAddModal}
+        onAddUser={handleCreateUser}
+        loading={loading}
+      />
+
+      <DeleteUserModal
+        isOpen={showDeleteModal}
+        onClose={closeDeleteModal}
+        user={userToDelete}
+        onConfirm={handleConfirmDelete}
         loading={loading}
       />
     </div>
