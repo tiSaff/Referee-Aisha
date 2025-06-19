@@ -1,4 +1,6 @@
 import React from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 import {
   Upload,
   Users,
@@ -14,62 +16,56 @@ import {
   BarChart3,
   FileText,
 } from 'lucide-react';
-import { useLanguageStore } from '../store/languageStore';
+import { PATHS } from '../constants/paths';
 import { useSidebarStore } from '../store/sidebarStore';
 
 interface SidebarProps {
   isOpen: boolean;
   onToggle: () => void;
-  currentPage: string;
-  onNavigate: (page: string) => void;
   onShowUploadModal: () => void;
 }
 
 const Sidebar: React.FC<SidebarProps> = ({
   isOpen,
   onToggle,
-  currentPage,
-  onNavigate,
   onShowUploadModal,
 }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { t, i18n } = useTranslation();
+  const isRTL = i18n.language === 'ar';
+  
   const { 
     settingsExpanded, 
     logsExpanded,
     setSettingsExpanded, 
     setLogsExpanded 
   } = useSidebarStore();
-  
-  // Use selector syntax for better performance
-  const currentLanguage = useLanguageStore(state => state.currentLanguage);
-  const t = useLanguageStore(state => state.t);
-  const isRTL = currentLanguage === 'ar';
 
   const menuItems = [
-    { icon: BarChart3, label: t('sidebar.dashboard'), page: 'dashboard', active: currentPage === 'dashboard' },
-    { icon: Video, label: t('sidebar.videosLibrary'), page: 'videos', active: currentPage === 'videos' },
-    { icon: Users, label: t('sidebar.mysaffUsers'), page: 'users', active: currentPage === 'users' },
-    { icon: ExternalLink, label: t('sidebar.externalUsers'), page: 'external', active: currentPage === 'external' },
-    { icon: Bell, label: t('sidebar.notificationsCenter'), page: 'notifications', active: currentPage === 'notifications' },
+    { icon: BarChart3, label: t('sidebar.dashboard'), path: PATHS.DASHBOARD },
+    { icon: Video, label: t('sidebar.videosLibrary'), path: PATHS.VIDEOS },
+    { icon: Users, label: t('sidebar.mysaffUsers'), path: PATHS.USERS },
+    { icon: ExternalLink, label: t('sidebar.externalUsers'), path: PATHS.EXTERNAL_USERS },
+    { icon: Bell, label: t('sidebar.notificationsCenter'), path: PATHS.NOTIFICATIONS },
     {
       icon: FileText,
       label: t('sidebar.logs'),
-      page: 'logs',
-      active: currentPage === 'logs' || currentPage === 'system-logs' || currentPage === 'user-logs' || currentPage === 'error-logs',
+      path: PATHS.SYSTEM_LOGS,
       hasSubmenu: true,
       submenu: [
-        { label: t('sidebar.systemLogs'), page: 'system-logs', active: currentPage === 'system-logs' },
-        { label: t('sidebar.userLogs'), page: 'user-logs', active: currentPage === 'user-logs' },
-        { label: t('sidebar.errorLogs'), page: 'error-logs', active: currentPage === 'error-logs' },
+        { label: t('sidebar.systemLogs'), path: PATHS.SYSTEM_LOGS },
+        { label: t('sidebar.userLogs'), path: PATHS.USER_LOGS },
+        { label: t('sidebar.errorLogs'), path: PATHS.ERROR_LOGS },
       ],
     },
     {
       icon: Settings,
       label: t('sidebar.settings'),
-      page: 'settings',
-      active: currentPage === 'settings' || currentPage === 'add-topic',
+      path: PATHS.ADD_TOPIC,
       hasSubmenu: true,
       submenu: [
-        { label: t('sidebar.addTopics'), page: 'add-topic', active: currentPage === 'add-topic' },
+        { label: t('sidebar.addTopics'), path: PATHS.ADD_TOPIC },
       ],
     },
   ];
@@ -77,36 +73,48 @@ const Sidebar: React.FC<SidebarProps> = ({
   const handleLogsClick = () => setLogsExpanded(!logsExpanded);
   const handleSettingsClick = () => setSettingsExpanded(!settingsExpanded);
 
-  const handleSubmenuClick = (page: string, parentPage: string) => {
-    onNavigate(page);
+  const handleNavigation = (path: string) => {
+    navigate(path);
+  };
+
+  const handleSubmenuClick = (path: string, parentPath: string) => {
+    navigate(path);
     // Expand the parent menu when navigating to a submenu item
-    if (parentPage === 'logs') {
+    if (parentPath === PATHS.SYSTEM_LOGS) {
       setLogsExpanded(true);
-    } else if (parentPage === 'settings') {
+    } else if (parentPath === PATHS.ADD_TOPIC) {
       setSettingsExpanded(true);
     }
   };
 
-  const getSubmenuExpanded = (page: string) => {
-    switch (page) {
-      case 'logs':
+  const getSubmenuExpanded = (path: string) => {
+    switch (path) {
+      case PATHS.SYSTEM_LOGS:
         return logsExpanded;
-      case 'settings':
+      case PATHS.ADD_TOPIC:
         return settingsExpanded;
       default:
         return false;
     }
   };
 
-  const getSubmenuClickHandler = (page: string) => {
-    switch (page) {
-      case 'logs':
+  const getSubmenuClickHandler = (path: string) => {
+    switch (path) {
+      case PATHS.SYSTEM_LOGS:
         return handleLogsClick;
-      case 'settings':
+      case PATHS.ADD_TOPIC:
         return handleSettingsClick;
       default:
         return () => {};
     }
+  };
+
+  const isActive = (path: string) => location.pathname === path;
+  const isParentActive = (item: any) => {
+    if (item.hasSubmenu && item.submenu) {
+      return item.submenu.some((subItem: any) => location.pathname === subItem.path);
+    }
+    return location.pathname === item.path;
   };
 
   return (
@@ -169,26 +177,26 @@ const Sidebar: React.FC<SidebarProps> = ({
                 {item.hasSubmenu ? (
                   <>
                     <button
-                      onClick={getSubmenuClickHandler(item.page)}
+                      onClick={getSubmenuClickHandler(item.path)}
                       className={`
                         w-full flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 transition-all duration-200 rounded-lg group text-sm sm:text-base
-                        ${item.active 
+                        ${isParentActive(item)
                           ? 'bg-gray-100 text-gray-900 shadow-sm' 
                           : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 hover:shadow-sm'
                         }
                       `}
-                      style={item.active ? { [`border${isRTL ? 'Right' : 'Left'}`]: '4px solid #2a835f' } : {}}
+                      style={isParentActive(item) ? { [`border${isRTL ? 'Right' : 'Left'}`]: '4px solid #2a835f' } : {}}
                     >
                       <div className="flex items-center space-x-3 sm:space-x-4">
                         <item.icon 
                           className={`w-4 sm:w-5 h-4 sm:h-5 flex-shrink-0 transition-colors duration-200 ${
-                            item.active ? 'text-gray-700' : 'text-gray-500 group-hover:text-gray-700'
+                            isParentActive(item) ? 'text-gray-700' : 'text-gray-500 group-hover:text-gray-700'
                           }`}
-                          style={item.active ? { color: '#2a835f' } : {}}
+                          style={isParentActive(item) ? { color: '#2a835f' } : {}}
                         />
                         <span className="font-medium">{item.label}</span>
                       </div>
-                      {getSubmenuExpanded(item.page) ? (
+                      {getSubmenuExpanded(item.path) ? (
                         <ChevronDown className="w-3 sm:w-4 h-3 sm:h-4 text-gray-400" />
                       ) : (
                         <ChevronRight className={`w-3 sm:w-4 h-3 sm:h-4 text-gray-400 ${isRTL ? 'rotate-180' : ''}`} />
@@ -196,20 +204,20 @@ const Sidebar: React.FC<SidebarProps> = ({
                     </button>
                     
                     {/* Submenu */}
-                    {getSubmenuExpanded(item.page) && item.submenu && (
+                    {getSubmenuExpanded(item.path) && item.submenu && (
                       <ul className={`mt-1 sm:mt-2 ${isRTL ? 'mr-4 sm:mr-6' : 'ml-4 sm:ml-6'} space-y-1`}>
                         {item.submenu.map((subItem, subIndex) => (
                           <li key={subIndex}>
                             <button
-                              onClick={() => handleSubmenuClick(subItem.page, item.page)}
+                              onClick={() => handleSubmenuClick(subItem.path, item.path)}
                               className={`
                                 w-full flex items-center space-x-2 sm:space-x-3 px-3 sm:px-4 py-1.5 sm:py-2 transition-all duration-200 rounded-lg text-xs sm:text-sm
-                                ${subItem.active 
+                                ${isActive(subItem.path)
                                   ? 'bg-gray-100 text-gray-900 shadow-sm' 
                                   : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
                                 }
                               `}
-                              style={subItem.active ? { [`border${isRTL ? 'Right' : 'Left'}`]: '3px solid #2a835f' } : {}}
+                              style={isActive(subItem.path) ? { [`border${isRTL ? 'Right' : 'Left'}`]: '3px solid #2a835f' } : {}}
                             >
                               <span>- {subItem.label}</span>
                             </button>
@@ -220,21 +228,21 @@ const Sidebar: React.FC<SidebarProps> = ({
                   </>
                 ) : (
                   <button
-                    onClick={() => onNavigate(item.page)}
+                    onClick={() => handleNavigation(item.path)}
                     className={`
                       w-full flex items-center space-x-3 sm:space-x-4 px-3 sm:px-4 py-2 sm:py-3 transition-all duration-200 rounded-lg group text-sm sm:text-base
-                      ${item.active 
+                      ${isActive(item.path)
                         ? 'bg-gray-100 text-gray-900 shadow-sm' 
                         : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900 hover:shadow-sm'
                       }
                     `}
-                    style={item.active ? { [`border${isRTL ? 'Right' : 'Left'}`]: '4px solid #2a835f' } : {}}
+                    style={isActive(item.path) ? { [`border${isRTL ? 'Right' : 'Left'}`]: '4px solid #2a835f' } : {}}
                   >
                     <item.icon 
                       className={`w-4 sm:w-5 h-4 sm:h-5 flex-shrink-0 transition-colors duration-200 ${
-                        item.active ? 'text-gray-700' : 'text-gray-500 group-hover:text-gray-700'
+                        isActive(item.path) ? 'text-gray-700' : 'text-gray-500 group-hover:text-gray-700'
                       }`}
-                      style={item.active ? { color: '#2a835f' } : {}}
+                      style={isActive(item.path) ? { color: '#2a835f' } : {}}
                     />
                     <span className="font-medium">{item.label}</span>
                   </button>
