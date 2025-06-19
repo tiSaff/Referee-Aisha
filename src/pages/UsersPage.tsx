@@ -14,6 +14,7 @@ import { useUserManager } from '../hooks/useUserManager';
 import { useUsersPageStore } from '../store/usersPageStore';
 import { usePagination } from '../hooks/usePagination';
 import { useAlertStore } from '../store/alertStore';
+import { useConfirmationModalStore } from '../store/confirmationModalStore';
 // import { useAddUserModalStore } from '../store/addUserModalStore'; // Commented out Add New User functionality
 import { User } from '../types';
 import ChangePasswordModal from '../components/users/ChangePasswordModal';
@@ -76,6 +77,9 @@ const UsersPage: React.FC = () => {
 
   // Alert store for success messages
   const { isVisible: alertVisible, message: alertMessage, hideAlert } = useAlertStore();
+
+  // Confirmation modal store
+  const { showConfirmation } = useConfirmationModalStore();
 
   // Pagination hook - ALWAYS show pagination
   const {
@@ -154,16 +158,23 @@ const UsersPage: React.FC = () => {
     }
   };
 
-  // Enhanced delete user with success alert
-  const handleConfirmDeleteWithAlert = async () => {
-    const userName = userToDelete?.name;
-    await handleConfirmDelete();
-    
-    // Show success alert after successful delete
-    if (userName) {
-      const { showAlert } = useAlertStore.getState();
-      showAlert(`User "${userName}" deleted successfully!`);
-    }
+  // Enhanced delete user with confirmation and success alert
+  const handleDeleteUserWithConfirmation = (user: User) => {
+    showConfirmation({
+      title: 'Delete User',
+      message: `Are you sure you want to delete "${user.name}"? This action cannot be undone and will permanently remove all their data, including their profile, video analysis history (${user.videosAnalyzed} videos), and all associated permissions.`,
+      confirmText: 'Delete User',
+      cancelText: 'Cancel',
+      type: 'danger',
+      onConfirm: async () => {
+        const userName = user.name;
+        await handleConfirmDelete();
+        
+        // Show success alert after successful delete
+        const { showAlert } = useAlertStore.getState();
+        showAlert(`User "${userName}" deleted successfully!`);
+      }
+    });
   };
 
   // NEW: Handle multiple role selection
@@ -280,7 +291,7 @@ const UsersPage: React.FC = () => {
               user={user}
               onView={handleViewUser}
               onEdit={handleEditUser}
-              onDelete={handleDeleteUser}
+              onDelete={handleDeleteUserWithConfirmation}
               loading={loading}
             />
           ))}
@@ -290,7 +301,7 @@ const UsersPage: React.FC = () => {
           users={paginatedUsers}
           onView={handleViewUser}
           onEdit={handleEditUser}
-          onDelete={handleDeleteUser}
+          onDelete={handleDeleteUserWithConfirmation}
           loading={loading}
         />
       )}
@@ -433,15 +444,6 @@ const UsersPage: React.FC = () => {
         employeeId={editingUser?.id || 0}
         phoneNumber={editingUser?.phone || ''}
         onSave={handleSavePassword}
-        loading={loading}
-      />
-
-      {/* Delete Confirmation Modal */}
-      <DeleteUserModal
-        isOpen={showDeleteModal}
-        onClose={closeDeleteModal}
-        user={userToDelete}
-        onConfirm={handleConfirmDeleteWithAlert}
         loading={loading}
       />
     </div>

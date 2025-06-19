@@ -12,6 +12,7 @@ import Pagination from '../components/common/Pagination';
 import { useVideoManager } from '../hooks/useVideoManager';
 import { useLanguageStore } from '../store/languageStore';
 import { usePagination } from '../hooks/usePagination';
+import { useConfirmationModalStore } from '../store/confirmationModalStore';
 
 const VideosPage: React.FC = () => {
   const { t, currentLanguage } = useLanguageStore();
@@ -39,6 +40,9 @@ const VideosPage: React.FC = () => {
   } = useVideoManager();
 
   const isRTL = currentLanguage === 'ar';
+
+  // Confirmation modal store
+  const { showConfirmation } = useConfirmationModalStore();
 
   // Pagination hook
   const {
@@ -116,6 +120,22 @@ const VideosPage: React.FC = () => {
       setShowReturnToPendingModal(false);
       setShowEditModal(false);
     }
+  };
+
+  // Enhanced delete video with confirmation
+  const handleDeleteVideoWithConfirmation = (video: any) => {
+    showConfirmation({
+      title: 'Delete Video',
+      message: `Are you sure you want to delete the video "${video.title}"? This action cannot be undone and will permanently remove the video file and all associated data.`,
+      confirmText: 'Delete Video',
+      cancelText: 'Cancel',
+      type: 'danger',
+      onConfirm: async () => {
+        // Here you would implement the actual delete functionality
+        console.log('Deleting video:', video.id);
+        // await deleteVideo(video.id);
+      }
+    });
   };
 
   const getStatusBadge = (status: string) => {

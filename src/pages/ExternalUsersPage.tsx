@@ -4,6 +4,7 @@ import { useExternalUserManager } from '../hooks/useExternalUserManager';
 import { useLanguageStore } from '../store/languageStore';
 import { usePagination } from '../hooks/usePagination';
 import { useAlertStore } from '../store/alertStore';
+import { useConfirmationModalStore } from '../store/confirmationModalStore';
 import PageHeader from '../components/common/PageHeader';
 import SearchBar from '../components/common/SearchBar';
 import ErrorDisplay from '../components/common/ErrorDisplay';
@@ -25,6 +26,9 @@ const ExternalUsersPage: React.FC = () => {
   
   // Alert store for success messages
   const { isVisible: alertVisible, message: alertMessage, hideAlert } = useAlertStore();
+  
+  // Confirmation modal store
+  const { showConfirmation } = useConfirmationModalStore();
   
   const {
     users,
@@ -79,16 +83,23 @@ const ExternalUsersPage: React.FC = () => {
     }
   };
 
-  // Enhanced delete user with success alert
-  const handleConfirmDeleteWithAlert = async () => {
-    const userName = userToDelete?.name;
-    await handleConfirmDelete();
-    
-    // Show success alert after successful delete
-    if (userName) {
-      const { showAlert } = useAlertStore.getState();
-      showAlert(`External user "${userName}" deleted successfully!`);
-    }
+  // Enhanced delete user with confirmation and success alert
+  const handleDeleteUserWithConfirmation = (user: any) => {
+    showConfirmation({
+      title: 'Delete External User',
+      message: `Are you sure you want to delete "${user.name}"? This action cannot be undone and will permanently remove all their data, including their profile, video analysis history (${user.videosAnalyzed} videos), and all associated permissions.`,
+      confirmText: 'Delete User',
+      cancelText: 'Cancel',
+      type: 'danger',
+      onConfirm: async () => {
+        const userName = user.name;
+        await handleConfirmDelete();
+        
+        // Show success alert after successful delete
+        const { showAlert } = useAlertStore.getState();
+        showAlert(`External user "${userName}" deleted successfully!`);
+      }
+    });
   };
 
   const handleExportUsers = () => {
@@ -180,7 +191,7 @@ const ExternalUsersPage: React.FC = () => {
               user={user}
               onView={handleViewUser}
               onEdit={handleEditUser}
-              onDelete={handleDeleteUser}
+              onDelete={handleDeleteUserWithConfirmation}
               showEditDelete={true}
               loading={loading}
             />
@@ -191,7 +202,7 @@ const ExternalUsersPage: React.FC = () => {
           users={paginatedUsers}
           onView={handleViewUser}
           onEdit={handleEditUser}
-          onDelete={handleDeleteUser}
+          onDelete={handleDeleteUserWithConfirmation}
           showEditDelete={true}
           loading={loading}
         />
@@ -228,14 +239,6 @@ const ExternalUsersPage: React.FC = () => {
         user={editingUser}
         onSave={handleSaveUserWithAlert}
         onFieldChange={updateEditingUserField}
-        loading={loading}
-      />
-      
-      <DeleteUserModal
-        isOpen={showDeleteModal}
-        onClose={closeDeleteModal}
-        user={userToDelete}
-        onConfirm={handleConfirmDeleteWithAlert}
         loading={loading}
       />
     </div>

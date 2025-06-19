@@ -4,6 +4,7 @@ import { useNotificationManager } from '../hooks/useNotificationManager';
 import { useUIStore } from '../store/uiStore';
 import { usePagination } from '../hooks/usePagination';
 import { useAlertStore } from '../store/alertStore';
+import { useConfirmationModalStore } from '../store/confirmationModalStore';
 import PageHeader from '../components/common/PageHeader';
 import SearchBar from '../components/common/SearchBar';
 import ErrorDisplay from '../components/common/ErrorDisplay';
@@ -33,6 +34,9 @@ const NotificationsPage: React.FC = () => {
   // Alert store for success messages
   const { isVisible: alertVisible, message: alertMessage, hideAlert } = useAlertStore();
 
+  // Confirmation modal store
+  const { showConfirmation } = useConfirmationModalStore();
+
   // Pagination hook - ALWAYS show pagination
   const {
     currentPage,
@@ -47,16 +51,25 @@ const NotificationsPage: React.FC = () => {
     initialPage: 1
   });
 
-  // Enhanced delete notification with success alert
-  const handleDeleteNotificationWithAlert = async (id: number) => {
+  // Enhanced delete notification with confirmation and success alert
+  const handleDeleteNotificationWithConfirmation = async (id: number) => {
     const notification = notifications.find(n => n.id === id);
-    await handleDeleteNotification(id);
-    
-    // Show success alert after successful delete
-    if (notification) {
-      const { showAlert } = useAlertStore.getState();
-      showAlert(`Notification "${notification.title}" deleted successfully!`);
-    }
+    if (!notification) return;
+
+    showConfirmation({
+      title: 'Delete Notification',
+      message: `Are you sure you want to delete the notification "${notification.title}"? This action cannot be undone.`,
+      confirmText: 'Delete Notification',
+      cancelText: 'Cancel',
+      type: 'danger',
+      onConfirm: async () => {
+        await handleDeleteNotification(id);
+        
+        // Show success alert after successful delete
+        const { showAlert } = useAlertStore.getState();
+        showAlert(`Notification "${notification.title}" deleted successfully!`);
+      }
+    });
   };
 
   // Enhanced refresh with success alert
@@ -150,7 +163,7 @@ const NotificationsPage: React.FC = () => {
         <>
           <NotificationList 
             notifications={paginatedNotifications}
-            onDelete={handleDeleteNotificationWithAlert}
+            onDelete={handleDeleteNotificationWithConfirmation}
             loading={loading}
           />
           

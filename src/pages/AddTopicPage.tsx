@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useAddTopicStore } from '../store/addTopicStore';
 import { usePagination } from '../hooks/usePagination';
 import { useAlertStore } from '../store/alertStore';
+import { useConfirmationModalStore } from '../store/confirmationModalStore';
 import TopicHeader from '../components/topic/TopicHeader';
 import TopicSearchFilter from '../components/topic/TopicSearchFilter';
 import TopicGrid from '../components/topic/TopicGrid';
@@ -60,6 +61,9 @@ const AddTopicPage: React.FC = () => {
   // Alert store for success messages
   const { isVisible: alertVisible, message: alertMessage, hideAlert } = useAlertStore();
 
+  // Confirmation modal store
+  const { showConfirmation } = useConfirmationModalStore();
+
   const filteredTopics = getFilteredTopics();
 
   // Pagination hook - ALWAYS show pagination
@@ -92,16 +96,25 @@ const AddTopicPage: React.FC = () => {
     }
   };
 
-  // Enhanced delete with success alert
-  const handleDeleteWithAlert = (topicId: string) => {
+  // Enhanced delete with confirmation and success alert
+  const handleDeleteWithConfirmation = (topicId: string) => {
     const topic = existingTopics.find(t => t.id === topicId);
-    handleDelete(topicId);
-    
-    // Show success alert
-    if (topic) {
-      const { showAlert } = useAlertStore.getState();
-      showAlert(`Topic "${topic.name}" deleted successfully!`);
-    }
+    if (!topic) return;
+
+    showConfirmation({
+      title: 'Delete Topic',
+      message: `Are you sure you want to delete the topic "${topic.name}"? This action cannot be undone and will permanently remove all associated data including subtopics and considerations.`,
+      confirmText: 'Delete Topic',
+      cancelText: 'Cancel',
+      type: 'danger',
+      onConfirm: () => {
+        handleDelete(topicId);
+        
+        // Show success alert
+        const { showAlert } = useAlertStore.getState();
+        showAlert(`Topic "${topic.name}" deleted successfully!`);
+      }
+    });
   };
 
   // Close dropdown when clicking outside
@@ -230,7 +243,7 @@ const AddTopicPage: React.FC = () => {
         onToggleDropdown={toggleDropdown}
         onView={handleView}
         onEdit={handleEdit}
-        onDelete={handleDeleteWithAlert}
+        onDelete={handleDeleteWithConfirmation}
         onCreateTopic={handleCreateTopic}
       />
 
