@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { usePaginationStore } from '../store/paginationStore';
 
 interface UsePaginationProps<T> {
