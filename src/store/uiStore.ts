@@ -23,13 +23,11 @@ interface UIState {
   // General UI states
   sidebarOpen: boolean;
   currentPage: string;
-  isUserMenuOpen: boolean;
   
   // Actions
   setModalState: (modal: string, isOpen: boolean) => void;
   setSidebarOpen: (isOpen: boolean) => void;
   setCurrentPage: (page: string) => void;
-  setIsUserMenuOpen: (isOpen: boolean) => void;
   closeAllModals: () => void;
 }
 
@@ -54,7 +52,6 @@ export const useUIStore = create<UIState>((set) => ({
   showDeleteExternalUserModal: false,
   sidebarOpen: false,
   currentPage: 'videos',
-  isUserMenuOpen: false,
 
   // Actions
   setModalState: (modal: string, isOpen: boolean) => {
@@ -70,10 +67,6 @@ export const useUIStore = create<UIState>((set) => ({
 
   setCurrentPage: (page: string) => {
     set({ currentPage: page, sidebarOpen: false });
-  },
-  
-  setIsUserMenuOpen: (isOpen: boolean) => {
-    set({ isUserMenuOpen: isOpen });
   },
 
   closeAllModals: () => {
