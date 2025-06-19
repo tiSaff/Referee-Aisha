@@ -50,7 +50,7 @@ Error Details:
 Please describe what you were doing when this error occurred:
 [Your description here]
     `);
-    window.open(`mailto:support@referee.com?subject=${subject}&body=${body}`);
+    window.open(`mailto:support@fti-platform.com?subject=${subject}&body=${body}`);
   };
 
   render() {
@@ -148,10 +148,10 @@ Please describe what you were doing when this error occurred:
                     <span>Report Error</span>
                   </Button>
                   <a 
-                    href="mailto:support@referee.com" 
+                    href="mailto:support@fti-platform.com" 
                     className="text-red-600 hover:text-red-800 font-medium transition-colors py-2"
                   >
-                    support@referee.com
+                    support@fti-platform.com
                   </a>
                 </div>
               </div>

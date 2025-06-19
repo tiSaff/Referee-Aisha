@@ -133,12 +133,14 @@ const RolesPage: React.FC = () => {
 
       {roles.length > 0 ? (
         <>
-          <RolesTable 
-            roles={paginatedRoles}
-            onEdit={handleEditRole}
-            onDelete={handleDeleteRoleWithConfirmation}
-            loading={loading}
-          />
+          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <RolesTable 
+              roles={paginatedRoles}
+              onEdit={handleEditRole}
+              onDelete={handleDeleteRoleWithConfirmation}
+              loading={loading}
+            />
+          </div>
           
           {/* Pagination - ALWAYS SHOW */}
           <div className="bg-white rounded-xl border border-gray-200 p-4 sm:p-6">
