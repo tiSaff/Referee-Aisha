@@ -13,7 +13,7 @@ const Footer: React.FC = () => {
       <div className="max-w-7xl mx-auto">
         <div className="text-center">
           <p className="text-sm text-gray-600 font-medium">
-            2025 © Technology and Innovation @ SAFF
+           2025 © Technology and Innovation at Saudi Arabian Football Federation (SAFF)
           </p>
         </div>
       </div>
