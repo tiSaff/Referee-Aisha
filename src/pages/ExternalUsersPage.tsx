@@ -9,6 +9,7 @@ import PageHeader from '../components/common/PageHeader';
 import SearchBar from '../components/common/SearchBar';
 import ErrorDisplay from '../components/common/ErrorDisplay';
 import LoadingSpinner from '../components/common/LoadingSpinner';
+import Button from '../components/common/Button';
 import UserCard from '../components/users/UserCard';
 import UserTable from '../components/users/UserTable';
 import ViewToggle from '../components/common/ViewToggle';
@@ -20,7 +21,6 @@ import AddExternalUserModal from '../components/external-users/AddExternalUserMo
 import DeleteUserModal from '../components/users/DeleteUserModal';
 import Pagination from '../components/common/Pagination';
 import PageAlert from '../components/common/PageAlert';
-import Button from '../components/common/Button';
 
 const ExternalUsersPage: React.FC = () => {
   const { currentLanguage } = useLanguageStore();
