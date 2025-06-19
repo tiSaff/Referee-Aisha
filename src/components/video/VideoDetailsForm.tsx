@@ -17,44 +17,24 @@ const VideoDetailsForm: React.FC<VideoDetailsFormProps> = ({
   isPublishedVideo
 }) => {
   const { mainPhotoType, setMainPhotoType, mainPhotoFile, setMainPhotoFile } = useEditVideoModalStore();
-  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [selectedPhotoIndex, setSelectedPhotoIndex] = useState<number>(2); // Default to middle photo
   
   // File input reference
   const fileInputRef = useRef<HTMLInputElement>(null);
   
-  // Handle photo type change
-  const handlePhotoTypeChange = (type: 'auto' | 'upload') => {
-    setMainPhotoType(type);
-    
-    // Show/hide upload area based on selection
-    const uploadArea = document.getElementById('photo-upload-area');
-    if (uploadArea) {
-      uploadArea.style.display = type === 'upload' ? 'block' : 'none';
-    }
-  };
+  // Sample photo URLs (in a real app, these would come from video frames)
+  const photoOptions = [
+    "https://images.pexels.com/photos/3621104/pexels-photo-3621104.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop",
+    "https://images.pexels.com/photos/3659683/pexels-photo-3659683.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop",
+    "https://images.pexels.com/photos/274422/pexels-photo-274422.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop",
+    "https://images.pexels.com/photos/3641352/pexels-photo-3641352.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop",
+    "https://images.pexels.com/photos/3641342/pexels-photo-3641342.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop"
+  ];
   
-  // Handle file selection
-  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file && file.type.startsWith('image/')) {
-      setMainPhotoFile(file);
-      
-      // Create preview
-      const reader = new FileReader();
-      reader.onload = () => {
-        setPhotoPreview(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
+  // Handle photo selection
+  const handlePhotoSelect = (index: number) => {
+    setSelectedPhotoIndex(index);
   };
-  
-  // Initialize upload area visibility
-  useEffect(() => {
-    const uploadArea = document.getElementById('photo-upload-area');
-    if (uploadArea) {
-      uploadArea.style.display = mainPhotoType === 'upload' ? 'block' : 'none';
-    }
-  }, [mainPhotoType]);
 
   return (
     <div className="space-y-6">
@@ -89,85 +69,33 @@ const VideoDetailsForm: React.FC<VideoDetailsFormProps> = ({
 
       {/* Main Photo Selection */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-2">
-          Main Photo
+        <label className="block text-sm font-medium text-gray-700 mb-3">
+          Select Main Photo
         </label>
-        <div className="space-y-3">
-          <div className="flex items-center space-x-3">
-            <input
-              type="radio"
-              id="photo-auto"
-              name="mainPhoto"
-              value="auto"
-              checked={mainPhotoType === 'auto'}
-              onChange={() => handlePhotoTypeChange('auto')}
-              className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
-            />
-            <label htmlFor="photo-auto" className="text-sm text-gray-700">
-              Auto-generate from video thumbnail
-            </label>
-          </div>
-          
-          <div className="flex items-center space-x-3">
-            <input
-              type="radio"
-              id="photo-upload"
-              name="mainPhoto"
-              value="upload"
-              checked={mainPhotoType === 'upload'}
-              onChange={() => handlePhotoTypeChange('upload')}
-              className="w-4 h-4 text-green-600 border-gray-300 focus:ring-green-500"
-            />
-            <label htmlFor="photo-upload" className="text-sm text-gray-700">
-              Upload custom photo
-            </label>
-          </div>
-          
-          {/* Upload area - shown when upload option is selected */}
-          <div id="photo-upload-area" className="mt-3">
-            {photoPreview ? (
-              <div className="relative">
+        <div className="flex flex-wrap justify-between gap-2">
+          {photoOptions.map((photo, index) => (
+            <div key={index} className="flex flex-col items-center">
+              <div className="relative mb-2">
                 <img 
-                  src={photoPreview} 
-                  alt="Preview" 
-                  className="w-full h-40 object-cover rounded-lg"
-                />
-                <button
-                  type="button"
-                  onClick={() => {
-                    setMainPhotoFile(null);
-                    setPhotoPreview(null);
-                    if (fileInputRef.current) {
-                      fileInputRef.current.value = '';
-                    }
+                  src={photo} 
+                  alt={`Thumbnail option ${index + 1}`}
+                  className="w-32 h-20 object-cover rounded-md border-2 border-transparent hover:border-gray-300 transition-all"
+                  style={{ 
+                    borderColor: selectedPhotoIndex === index ? '#2a835f' : 'transparent',
+                    opacity: selectedPhotoIndex === index ? 1 : 0.8
                   }}
-                  className="absolute top-2 right-2 bg-white rounded-full p-1 shadow-md hover:bg-gray-100"
-                >
-                  <X className="w-4 h-4 text-gray-600" />
-                </button>
-              </div>
-            ) : (
-              <div 
-                className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-gray-400 transition-colors cursor-pointer"
-                onClick={() => fileInputRef.current?.click()}
-              >
-                <Upload className="w-8 h-8 text-gray-400 mx-auto mb-2" />
-                <p className="text-sm font-medium text-gray-600 mb-1">
-                  Choose image file
-                </p>
-                <p className="text-xs text-gray-500">
-                  JPG, PNG or GIF up to 5MB
-                </p>
+                />
                 <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileSelect}
-                  className="hidden"
+                  type="radio"
+                  name="mainPhoto"
+                  id={`photo-${index}`}
+                  checked={selectedPhotoIndex === index}
+                  onChange={() => handlePhotoSelect(index)}
+                  className="absolute right-1 top-1 w-4 h-4 accent-[#2a835f]"
                 />
               </div>
-            )}
-          </div>
+            </div>
+          ))}
         </div>
       </div>
 

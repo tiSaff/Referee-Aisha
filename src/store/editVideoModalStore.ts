@@ -25,6 +25,7 @@ interface EditVideoModalState {
   // Main photo selection
   mainPhotoType: 'auto' | 'upload';
   mainPhotoFile: File | null;
+  selectedPhotoIndex: number;
   
   // Decision state
   decisions: DecisionState;
@@ -53,6 +54,7 @@ interface EditVideoModalState {
   // Main photo actions
   setMainPhotoType: (type: 'auto' | 'upload') => void;
   setMainPhotoFile: (file: File | null) => void;
+  setSelectedPhotoIndex: (index: number) => void;
   
   // Decision actions
   setDecision: (key: string, value: boolean) => void;
@@ -81,6 +83,7 @@ export const useEditVideoModalStore = create<EditVideoModalState>((set, get) => 
   // Main photo selection
   mainPhotoType: 'auto',
   mainPhotoFile: null,
+  selectedPhotoIndex: 2, // Default to middle photo
   
   // Initial decisions state
   decisions: {
@@ -241,6 +244,7 @@ VAR
   // Main photo setters
   setMainPhotoType: (type: 'auto' | 'upload') => set({ mainPhotoType: type }),
   setMainPhotoFile: (file: File | null) => set({ mainPhotoFile: file }),
+  setSelectedPhotoIndex: (index: number) => set({ selectedPhotoIndex: index }),
   
   // Decision actions with sub-option logic
   setDecision: (decisionKey: string, checked: boolean) => {
@@ -379,6 +383,7 @@ VAR
       notes: '',
       mainPhotoType: 'auto',
       mainPhotoFile: null,
+      selectedPhotoIndex: 2,
       decisions: {
         // Reset all decisions to false
         noFoul: false,
@@ -429,6 +434,7 @@ VAR
       notes: '',
       mainPhotoType: 'auto',
       mainPhotoFile: null,
+      selectedPhotoIndex: 2,
       // Keep current decisions and topic pairs when initializing
     });
   }
