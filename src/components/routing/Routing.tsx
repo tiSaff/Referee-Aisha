@@ -14,6 +14,7 @@ import LogsPage from '../../pages/LogsPage';
 import LoginSaff from '../../pages/LoginSaff';
 import NotFoundPage from '../../pages/NotFoundPage';
 import InternalServerErrorPage from '../../pages/InternalServerErrorPage';
+import RolesPage from '../../pages/RolesPage';
 import MainLayout from '../layout/MainLayout';
 
 export default function Routing() {
@@ -45,6 +46,7 @@ export default function Routing() {
         <Route path={PATHS.SYSTEM_LOGS} element={<LogsPage />} />
         <Route path={PATHS.USER_LOGS} element={<LogsPage />} />
         <Route path={PATHS.ERROR_LOGS} element={<LogsPage />} />
+        <Route path={PATHS.ROLES} element={<RolesPage />} />
       </Route>
       
       {/* 404 - Catch all route (must be last) */}

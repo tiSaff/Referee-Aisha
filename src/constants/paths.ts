@@ -11,6 +11,7 @@ export const PATHS = {
   ERROR_LOGS: "/error-logs",
   LOGIN: "/login",
   LOGINMY: "/loginmy",
+  ROLES: "/roles",
 } as const;
 
 export type PathKeys = keyof typeof PATHS;

@@ -15,6 +15,7 @@ import {
   Plus,
   BarChart3,
   FileText,
+  UserCog,
 } from 'lucide-react';
 import { PATHS } from '../constants/paths';
 import { useSidebarStore } from '../store/sidebarStore';
@@ -66,6 +67,7 @@ const Sidebar: React.FC<SidebarProps> = ({
       hasSubmenu: true,
       submenu: [
         { label: t('sidebar.addTopics'), path: PATHS.ADD_TOPIC },
+        { label: 'Roles', path: PATHS.ROLES },
       ],
     },
   ];
