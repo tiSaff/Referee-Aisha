@@ -155,10 +155,10 @@ const Sidebar: React.FC<SidebarProps> = ({
         dir={isRTL ? 'rtl' : 'ltr'}
       >
         {/* Upload Video Button */}
-        <div className="p-4 sm:p-6">
+        <div className="p-3 sm:p-4">
           <button
             onClick={onShowUploadModal}
-            className="flex items-center space-x-2 sm:space-x-3 w-full px-3 sm:px-4 py-2 text-white rounded-md transition-colors duration-200 font-medium hover:opacity-90 text-sm"
+            className="flex items-center space-x-2 sm:space-x-3 w-full px-3 sm:px-4 py-2 text-white rounded-xl transition-colors duration-200 font-medium hover:opacity-90 text-sm"
             style={{ backgroundColor: '#2a835f' }}
           >
             <Upload className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} />
@@ -167,9 +167,9 @@ const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Back to MySAFF Button */}
-        <div className="px-4 sm:px-6 pb-4 sm:pb-6">
+        <div className="px-3 sm:px-4 pb-3 sm:pb-4">
           <button
-            className="flex items-center space-x-2 sm:space-x-3 w-full px-3 sm:px-4 py-2 text-white rounded-md transition-colors duration-200 font-medium hover:opacity-90 text-sm"
+            className="flex items-center space-x-2 sm:space-x-3 w-full px-3 sm:px-4 py-2 text-white rounded-xl transition-colors duration-200 font-medium hover:opacity-90 text-sm"
             style={{ backgroundColor: '#2a835f' }}
           >
             <ArrowLeft className={`w-4 h-4 ${isRTL ? 'rotate-180' : ''}`} />
@@ -178,8 +178,8 @@ const Sidebar: React.FC<SidebarProps> = ({
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 py-4 sm:py-6 overflow-y-auto">
-          <ul className="space-y-1 sm:space-y-2 px-3 sm:px-4">
+        <nav className="flex-1 py-2 sm:py-3 overflow-y-auto">
+          <ul className="space-y-0.5 px-3 sm:px-4">
             {menuItems.map((item, index) => (
               <li key={index}>
                 {item.hasSubmenu ? (
@@ -187,7 +187,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                     <button
                       onClick={getSubmenuClickHandler(item.path)}
                       className={`
-                        w-full flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 transition-all duration-200 rounded-lg group text-sm sm:text-base
+                        w-full flex items-center justify-between px-3 sm:px-4 py-2 transition-all duration-200 rounded-xl group text-sm sm:text-base
                         ${isParentActive(item)
                           ? 'bg-gray-100 text-gray-900' 
                           : 'text-gray-600 hover:bg-green-100 hover:text-green-700'
@@ -211,13 +211,13 @@ const Sidebar: React.FC<SidebarProps> = ({
                     
                     {/* Submenu */}
                     {getSubmenuExpanded(item.path) && item.submenu && (
-                      <ul className={`mt-1 sm:mt-2 ${isRTL ? 'mr-4 sm:mr-6' : 'ml-4 sm:ml-6'} space-y-1`}>
+                      <ul className={`mt-0.5 ${isRTL ? 'mr-4 sm:mr-6' : 'ml-4 sm:ml-6'} space-y-0.5`}>
                         {item.submenu.map((subItem, subIndex) => (
                           <li key={subIndex}>
                             <button
                               onClick={() => handleSubmenuClick(subItem.path, item.path)}
                               className={`
-                                w-full flex items-center space-x-2 sm:space-x-3 px-3 sm:px-4 py-1.5 sm:py-2 transition-all duration-200 rounded-lg text-xs sm:text-sm
+                                w-full flex items-center space-x-2 sm:space-x-3 px-3 sm:px-4 py-1.5 transition-all duration-200 rounded-xl text-xs sm:text-sm
                                 ${isActive(subItem.path)
                                   ? 'bg-gray-100 text-gray-900' 
                                   : 'text-gray-600 hover:bg-green-100 hover:text-green-700'
@@ -235,7 +235,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                   <button
                     onClick={() => handleNavigation(item.path)}
                     className={`
-                      w-full flex items-center space-x-3 sm:space-x-4 px-3 sm:px-4 py-2 sm:py-3 transition-all duration-200 rounded-lg group text-sm sm:text-base
+                      w-full flex items-center space-x-3 sm:space-x-4 px-3 sm:px-4 py-2 transition-all duration-200 rounded-xl group text-sm sm:text-base
                       ${isActive(item.path)
                         ? 'bg-gray-100 text-gray-900' 
                         : 'text-gray-600 hover:bg-green-100 hover:text-green-700'
