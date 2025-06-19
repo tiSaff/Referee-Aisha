@@ -189,7 +189,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                       className={`
                         w-full flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 transition-all duration-200 rounded-lg group text-sm sm:text-base
                         ${isParentActive(item)
-                          ? 'text-black' 
+                          ? 'bg-gray-100 text-gray-900' 
                           : 'text-gray-600 hover:bg-green-100 hover:text-green-700'
                         }
                       `}
@@ -197,7 +197,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                       <div className="flex items-center space-x-3 sm:space-x-4">
                         <item.icon 
                           className={`w-4 sm:w-5 h-4 sm:h-5 flex-shrink-0 transition-colors duration-200 ${
-                            isParentActive(item) ? 'text-black' : 'text-gray-500 group-hover:text-green-700'
+                            isParentActive(item) ? 'text-gray-700' : 'text-gray-500 group-hover:text-green-700'
                           }`}
                         />
                         <span className="font-medium">{item.label}</span>
@@ -219,7 +219,7 @@ const Sidebar: React.FC<SidebarProps> = ({
                               className={`
                                 w-full flex items-center space-x-2 sm:space-x-3 px-3 sm:px-4 py-1.5 sm:py-2 transition-all duration-200 rounded-lg text-xs sm:text-sm
                                 ${isActive(subItem.path)
-                                  ? 'text-black' 
+                                  ? 'bg-gray-100 text-gray-900' 
                                   : 'text-gray-600 hover:bg-green-100 hover:text-green-700'
                                 }
                               `}
@@ -237,14 +237,14 @@ const Sidebar: React.FC<SidebarProps> = ({
                     className={`
                       w-full flex items-center space-x-3 sm:space-x-4 px-3 sm:px-4 py-2 sm:py-3 transition-all duration-200 rounded-lg group text-sm sm:text-base
                       ${isActive(item.path)
-                        ? 'text-black' 
+                        ? 'bg-gray-100 text-gray-900' 
                         : 'text-gray-600 hover:bg-green-100 hover:text-green-700'
                       }
                     `}
                   >
                     <item.icon 
                       className={`w-4 sm:w-5 h-4 sm:h-5 flex-shrink-0 transition-colors duration-200 ${
-                        isActive(item.path) ? 'text-black' : 'text-gray-500 group-hover:text-green-700'
+                        isActive(item.path) ? 'text-gray-700' : 'text-gray-500 group-hover:text-green-700'
                       }`}
                     />
                     <span className="font-medium">{item.label}</span>
