@@ -13,6 +13,7 @@ import { useVideoManager } from '../hooks/useVideoManager';
 import { useLanguageStore } from '../store/languageStore';
 import { usePagination } from '../hooks/usePagination';
 import { useConfirmationModalStore } from '../store/confirmationModalStore';
+import { useVideoCardStore } from '../store/videoCardStore';
 
 const VideosPage: React.FC = () => {
   const { t, currentLanguage } = useLanguageStore();
@@ -38,6 +39,12 @@ const VideosPage: React.FC = () => {
     setShowReturnToPendingModal,
     clearError,
   } = useVideoManager();
+
+  // Reset video card dropdown when navigating
+  const { resetDropdown } = useVideoCardStore();
+  useEffect(() => {
+    return () => resetDropdown();
+  }, [resetDropdown]);
 
   const isRTL = currentLanguage === 'ar';
 

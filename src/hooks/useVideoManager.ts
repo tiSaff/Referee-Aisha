@@ -51,11 +51,23 @@ export const useVideoManager = () => {
   const videoStats = getVideoStats();
 
   const handleUpdateVideo = async (videoId: string, videoData: Partial<VideoData>) => {
-    await updateVideo(videoId, videoData);
+    try {
+      await updateVideo(videoId, videoData);
+      return true;
+    } catch (error) {
+      console.error("Error updating video:", error);
+      return false;
+    }
   };
 
   const handleUploadVideo = async (file: File, metadata: Partial<VideoData>) => {
-    await uploadVideo(file, metadata);
+    try {
+      await uploadVideo(file, metadata);
+      return true;
+    } catch (error) {
+      console.error("Error uploading video:", error);
+      return false;
+    }
   };
 
   const handleSelectVideo = (video: VideoData | null) => {

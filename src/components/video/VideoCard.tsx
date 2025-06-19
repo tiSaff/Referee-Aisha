@@ -98,7 +98,7 @@ const VideoCard: React.FC<VideoCardProps> = ({
           {getStatusBadge(video.status)}
         </div>
 
-        <div className={`absolute bottom-2 sm:bottom-3 ${isRTL ? 'left-2 sm:left-3' : 'right-2 sm:right-3'} bg-black bg-opacity-80 text-white px-2 py-1 rounded-lg text-xs sm:text-sm font-medium backdrop-blur-sm`}>
+        <div className={`absolute bottom-2 sm:bottom-3 ${isRTL ? 'left-2 sm:left-3' : 'right-2 sm:right-3'} bg-black bg-opacity-80 text-white px-3 py-1 rounded-full text-xs sm:text-sm font-medium backdrop-blur-sm`}>
           {video.duration}
         </div>
 
@@ -113,7 +113,10 @@ const VideoCard: React.FC<VideoCardProps> = ({
           
           {/* Dropdown Menu */}
           {isDropdownOpen && (
-            <div className={`absolute ${isRTL ? 'left-0' : 'right-0'} top-full mt-2 bg-white rounded-lg shadow-xl border border-gray-200 py-2 min-w-[140px] z-50 animate-in slide-in-from-top-2 duration-200`}>
+            <div 
+              className={`absolute ${isRTL ? 'left-0' : 'right-0'} top-full mt-2 bg-white rounded-lg shadow-xl border border-gray-200 py-2 min-w-[140px] z-50 animate-in slide-in-from-top-2 duration-200`}
+              onClick={(e) => e.stopPropagation()}
+            >
               <button
                 onClick={(e) => handleMenuAction('view', e)}
                 className="w-full px-4 py-2 text-left text-sm text-gray-700 hover:bg-gray-50 flex items-center space-x-3 transition-colors"
