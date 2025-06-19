@@ -130,18 +130,18 @@ const Sidebar: React.FC<SidebarProps> = ({
       {/* Sidebar */}
       <div
         className={`
-          bg-white border-gray-200 z-50 flex flex-col shadow-lg w-64 sm:w-72 max-w-full
+          bg-white border-gray-200 z-50 flex flex-col shadow-lg w-64 sm:w-72 max-w-full h-screen
           ${isRTL ? 'border-l' : 'border-r'}
           ${isOpen ? (
             isRTL ? 
-            'fixed top-0 right-0 h-screen transition-transform duration-300 ease-in-out translate-x-0 lg:relative lg:h-screen' :
-            'fixed top-0 left-0 h-screen transition-transform duration-300 ease-in-out translate-x-0 lg:relative lg:h-screen'
+            'fixed top-0 right-0 transition-transform duration-300 ease-in-out translate-x-0 lg:relative' :
+            'fixed top-0 left-0 transition-transform duration-300 ease-in-out translate-x-0 lg:relative'
           ) : (
             isRTL ? 
-            'fixed top-0 right-0 h-screen transition-transform duration-300 ease-in-out translate-x-full lg:relative lg:h-screen lg:translate-x-0' :
-            'fixed top-0 left-0 h-screen transition-transform duration-300 ease-in-out -translate-x-full lg:relative lg:h-screen lg:translate-x-0'
+            'fixed top-0 right-0 transition-transform duration-300 ease-in-out translate-x-full lg:relative lg:translate-x-0' :
+            'fixed top-0 left-0 transition-transform duration-300 ease-in-out -translate-x-full lg:relative lg:translate-x-0'
           )}
-          lg:block lg:h-screen
+          lg:block
         `}
         dir={isRTL ? 'rtl' : 'ltr'}
       >
