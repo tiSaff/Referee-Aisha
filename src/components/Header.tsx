@@ -1,6 +1,6 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Bell, User, Globe } from 'lucide-react';
+import { Menu, Bell, User, Globe } from 'lucide-react';
 
 interface HeaderProps {
   onToggleSidebar: () => void;
@@ -17,6 +17,12 @@ const Header: React.FC<HeaderProps> = ({ onToggleSidebar }) => {
   return (
     <header className="text-white px-4 py-3 flex items-center justify-between shadow-md w-full" style={{ backgroundColor: '#2a835f' }}>
       <div className="flex items-center space-x-3">
+        <button 
+          onClick={onToggleSidebar}
+          className="p-2 rounded transition-colors hover:bg-black hover:bg-opacity-10 lg:hidden"
+        >
+          <Menu className="w-5 h-5" />
+        </button>
         <div className="flex items-center space-x-2">
           <img 
             src="https://images.pexels.com/photos/274506/pexels-photo-274506.jpeg?auto=compress&cs=tinysrgb&w=32&h=32&fit=crop" 

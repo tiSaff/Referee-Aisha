@@ -29,7 +29,7 @@ const MainLayout: React.FC = () => {
 
   return (
     <div
-      className="min-h-screen flex flex-col w-full overflow-x-hidden"
+      className="min-h-screen flex flex-col w-full overflow-hidden"
       dir={isRTL ? 'rtl' : 'ltr'}
     >
       {/* Header */}
@@ -44,8 +44,8 @@ const MainLayout: React.FC = () => {
         />
 
         {/* Main Content Area */}
-        <div className="flex-1 flex flex-col min-w-0 min-h-screen bg-gray-50">
-          <main className="flex-1 p-4 sm:p-6 min-w-0">
+        <div className="flex-1 flex flex-col min-w-0">
+          <main className="flex-1 p-4 sm:p-6 min-w-0 bg-gray-50">
             <Outlet />
           </main>
 
