@@ -1,25 +1,25 @@
 [[redirects]]
-from = "/*"
-to = "/index.html"
-status = 200
+  from = "/*"
+  to = "/index.html"
+  status = 200
 
 [build]
-command = "npx vite build"
-publish = "dist"
+  command = "npm run build"
+  publish = "dist"
 
 [build.processing]
-skip_processing = false
+  skip_processing = false
 
 [build.processing.css]
-bundle = true
-minify = true
+  bundle = true
+  minify = true
 
 [build.processing.js]
-bundle = true
-minify = true
+  bundle = true
+  minify = true
 
 [build.processing.html]
-pretty_urls = true
+  pretty_urls = true
 
 [build.processing.images]
-compress = true
+  compress = true
